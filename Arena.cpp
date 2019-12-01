@@ -946,7 +946,7 @@ void Arena::atualizaInimigos(float p){
             desl = (((this->velocidadeJogadorAtual  * sqrt(2) * -multiplicadorDeslocamentoX(ind->direcao)) * ind->inimigo_vel) * p) / 2;
             ind->andaYCircle(desl);
             
-            ind->thetaHelice += (ind->inimigo_vel * 60 / 360) + (50.0 * ind->inimigo_vel * 60 / 360);
+            ind->thetaHelice += ((70 + ind->inimigo_vel) * 60 / 360.0) + ((120) * 60 / 360.0);
 
             tiroInimigo(ind);
 
