@@ -574,6 +574,13 @@ void Arena::decolando()
     }
 };
 
+float Arena::deslocX(){
+    return (((this->velocidadeJogadorAtual * 1.3*sqrt(2) * -multiplicadorDeslocamentoY(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
+}
+float Arena::deslocY(){
+    return (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
+}
+
 void Arena::decolou(float deltaT)
 {
     this->timeNew = glutGet(GLUT_ELAPSED_TIME);
@@ -583,23 +590,24 @@ void Arena::decolou(float deltaT)
     {
         this->timeOld = this->timeNew;
     }
-    float desl = (((this->velocidadeJogadorAtual * 1.3*sqrt(2) * -multiplicadorDeslocamentoY(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
+
+    // float desl = (((this->velocidadeJogadorAtual * 1.3*sqrt(2) * -multiplicadorDeslocamentoY(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
 
     // cout<<this->direcao<<endl;
     // float deslAux = desl * -multiplicadorDeslocamentoY(this->direcao);
-    andaXjogador(desl);
+    andaXjogador(this->deslocX());
     if (this->encostandoNumInimigo() == 1)
     {
-        andaXjogador(-desl);
+        andaXjogador(-this->deslocX());
         this->addEstadoDecolagem();
     }
 
-    desl = (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
+    // desl = (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
     // deslAux = desl * -multiplicadorDeslocamentoX(this->direcao);
-    andaYjogador(desl);
+    andaYjogador(this->deslocY());
     if (this->encostandoNumInimigo() == 1)
     {
-        andaXjogador(-desl);
+        andaXjogador(-this->deslocX());
         this->addEstadoDecolagem();
     }
     TrataForaDaArena(&jogador_config);

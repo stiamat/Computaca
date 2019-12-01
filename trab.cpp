@@ -201,14 +201,22 @@ void mouse_motion(int x, int y)
 
 //
 int zCam = -300, yCam = 500, xCam = 500;
+int camA = 0;
 int angCam = 90;
 void display(void)
 {
 
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    gluPerspective(90, 1, 3, 1000);
-    gluLookAt(xCam, yCam, zCam, 500, 500, -1, 0, 1, 0);
+    if(camA == 0){
+        gluPerspective(90, 1, 3, 1000);
+        gluLookAt(xCam, yCam, zCam, 500, 500, -1, 0, 1, 0);
+    }else{
+        Circle jogador = arena_modelo.get_jogador();
+        gluPerspective(45, 1, 2, 500);
+        gluLookAt(jogador.get_x(), jogador.get_x(), -20,arena_modelo.deslocX(), arena_modelo.deslocY(), -1, 0, 0, -1);
+    }
+    
 
     // printf("%i %i %i\n", xCam,yCam,zCam);
     // glLoadIdentity();
@@ -319,6 +327,14 @@ void keyPress(unsigned char key, int x, int y)
 {
     switch (key)
     {
+    case '0':
+        letras['0'] = 1;
+        camA = 0;
+        break;
+    case '1':
+        letras['1'] = 1;
+        camA = 1;
+        break;
     case '8':
         letras['8'] = 1;
         yCam += 5;
