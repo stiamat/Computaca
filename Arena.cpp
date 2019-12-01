@@ -16,6 +16,8 @@
 
 
 using namespace std;
+GLUquadricObj *quadratic = gluNewQuadric();
+
 
 Arena::Arena(){};
 
@@ -495,6 +497,12 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
     glTranslatef(arena->get_x(), arena->get_y(), 0);
 
     Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
+    
+    glPushMatrix();
+        glTranslatef(0, 0, -16*20);//mudar
+        glColor3f(0,0.5,0.5);
+        gluCylinder(quadratic,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar
+    glPopMatrix();
 
     Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
 

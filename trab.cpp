@@ -213,8 +213,8 @@ void display(void)
         gluLookAt(xCam, yCam, zCam, 500, 500, -1, 0, 1, 0);
     }else{
         Circle jogador = arena_modelo.get_jogador();
-        gluPerspective(45, 1, 2, 500);
-        gluLookAt(jogador.get_y(), jogador.get_x(), -30, -arena_modelo.deslocX(), -arena_modelo.deslocY(), -1, 0, 0, -1);
+        gluPerspective(90, 1, 1, 500);
+        gluLookAt(jogador.get_y(), jogador.get_x(), -100, jogador.get_y(), jogador.get_x(), -1, 0, 1, 0);
     }
     
 
