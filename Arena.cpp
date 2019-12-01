@@ -35,8 +35,8 @@ void Arena::add_individuos(int x, int y, int raio, float r, float g, float b, in
         aux->inimigo_freqTiro = this->inimigo_freqTiro;
         aux->inimigo_vel = this->inimigo_vel;
         aux->inimigo_vel_tiro = this->inimigo_vel_tiro;
-        aux->direcao = rand() % 360;
-        aux->thetaCanhao = rand() % 45;
+        aux->direcao = 0;
+        aux->thetaCanhao = 0;
     }
     individuos.push_back(aux);
 };
