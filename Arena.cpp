@@ -293,7 +293,9 @@ void Arena::DesenhaBaseInimiga(vector<Circle *> *lista_individuos){
         glPushMatrix();
         glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
         if(ind->get_corG() != 0){
-            Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
+            glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
+            glutSolidSphere(ind->get_raio(), 50, 50);
+            // Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
         }
         
         glPopMatrix();
