@@ -16,6 +16,7 @@ float letras[256] = {0};
 int mouseAt = 0;
 int basesIni = 0;
 int basesIniAgr = 0;
+int eixo = 0;
 char textImprimir[1000];
 
 // --------------------------------
@@ -444,11 +445,17 @@ void idle(void)
 
     if (letras['r'] == 1)
     {
+        eixo = 0;
         arena_modelo.reset(arena_reset);
+    }
+
+    if(eixo == 0){
+        arena_modelo.colocaAviaoNosEixo();
     }
 
     if (letras['u'] == 1)
     {
+        eixo = 1;
         arena_modelo.inicioDecolagem();
     }
 

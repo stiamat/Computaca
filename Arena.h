@@ -173,6 +173,7 @@ public:
         return sqrt(pow(jogador_config.get_x() - pista_decolagem.get_x2(), 2) + pow(jogador_config.get_y() - pista_decolagem.get_y2(), 2));
     };
 
+    void colocaAviaoNosEixo();
     void inicioDecolagem();
     void decolando();
     void trocaDeContexto();

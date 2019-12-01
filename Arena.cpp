@@ -497,6 +497,14 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
     glTranslatef(arena->get_x(), arena->get_y(), 0);
 
     Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
+
+    Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
+
+    Desenha_Tiro();
+
+    Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
+
+    Desenha_Individuos(lista_individuos);
     
     glPushMatrix();
         glTranslatef(0, 0, -16*20);//mudar
@@ -504,15 +512,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
         gluCylinder(quadratic,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar
     glPopMatrix();
 
-    Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
-
     DesenhaBaseInimiga(lista_individuos);
-
-    Desenha_Tiro();
-
-    Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
-
-    Desenha_Individuos(lista_individuos);
 
     glPopMatrix();
    
@@ -537,6 +537,13 @@ void Arena::inicioDecolagem()
         this->direcao = anguloJogador(auxX, auxY);
     }
 };
+
+void Arena::colocaAviaoNosEixo(){
+
+    this->deltaS = this->distanciaJogadorFimPista();
+    float auxX = pista_decolagem.get_x2() - jogador_config.get_x(), auxY = pista_decolagem.get_y2() - jogador_config.get_y();
+    this->direcao = anguloJogador(auxX, auxY);
+}
 
 void Arena::decolando()
 {
