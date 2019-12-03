@@ -528,7 +528,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
     rot = -90.0;
     glRotatef(rot, 0, 0, 1);
     glPushMatrix();
-        glRotatef(thetaHelice, 1, 0, 0);
+        glRotatef(-thetaHelice, 1, 0, 0);
         Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
     glPopMatrix();
     glPopMatrix();
@@ -547,7 +547,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
     rot = -90.0;
     glRotatef(rot, 0, 0, 1);
     glPushMatrix();
-        glRotatef(thetaHelice, 1, 0, 0);
+        glRotatef(-thetaHelice, 1, 0, 0);
         Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
     glPopMatrix();
     glPopMatrix();

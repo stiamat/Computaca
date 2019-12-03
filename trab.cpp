@@ -232,17 +232,17 @@ void display(void)
         Circle jogadorT = arena_modelo.get_jogador();
         printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
     }else{
-        gluPerspective(90, 1, 1, 700);
+        gluPerspective(45, 1, 1, 700);
         printf("%i %i %i\n", xCam,yCam,zCam);
         Circle jogadorT = arena_modelo.get_jogador();
         printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
         // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
         float x2 = jogadorT.get_x() - 500;
         float y2 = jogadorT.get_y() - 500;
-        float x1 = jogadorT.get_x() - 500 + 10*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
-        float y1 = jogadorT.get_y() - 500 + 10*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
+        float x1 = jogadorT.get_x() - 500 + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
+        float y1 = jogadorT.get_y() - 500 + 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
         
-        gluLookAt(500 - x1, 500 - y1, -3, 500 - x2, 500 - y2, -3, 0, 0, -1);
+        gluLookAt(500 - x1, 500 - y1, -4, 500 - x2, 500 - y2, -3, 0, 0, -1);
         
         
     }
