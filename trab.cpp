@@ -218,7 +218,7 @@ void mouse_motion(int x, int y)
 //
 int zCam = 0, yCam = 0, xCam = 0;
 int camA = 0;
-int angCam = 90;
+int angCam = 0;
 
 void display(void)
 {
@@ -232,14 +232,19 @@ void display(void)
         Circle jogadorT = arena_modelo.get_jogador();
         printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
     }else{
-        gluPerspective(90, 1, 1, 500);
+        gluPerspective(90, 1, 1, 700);
         printf("%i %i %i\n", xCam,yCam,zCam);
         Circle jogadorT = arena_modelo.get_jogador();
         printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
         // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
-        float x1 = 0.22380952*jogadorT.get_x()+312.804761;
-        float y1 = 4.121596*jogadorT.get_y()-1876.0794476;
-        gluLookAt(y1, x1, zCam, y1, x1, 1, 0, 1, 0);
+        float x2 = jogadorT.get_x() - 500;
+        float y2 = jogadorT.get_y() - 500;
+        float x1 = jogadorT.get_x() - 500 + 10*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
+        float y1 = jogadorT.get_y() - 500 + 10*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
+        
+        gluLookAt(500 - x1, 500 - y1, -3, 500 - x2, 500 - y2, -3, 0, 0, -1);
+        
+        
     }
     
 
@@ -400,15 +405,16 @@ void keyPress(unsigned char key, int x, int y)
         zCam = -300;
         xCam = 500;
         yCam = 500;
+        angCam = 0;
         break;
-    // case '1':
-    //     letras['1'] = 1;
-    //     toggleCam = 1;
-    //     break;
-    // case '2':
-    //     letras['2'] = 1;
-    //     toggleCam = 2;
-    //     break;
+    case 'o':
+        letras['o'] = 1;
+        angCam += 5;
+        break;
+    case 'p':
+        letras['p'] = 1;
+        angCam -= 5;
+        break;
     case 'a':
         letras['a'] = 1;
         break;

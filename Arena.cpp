@@ -697,10 +697,10 @@ void Arena::decolando()
     }
 };
 
-float Arena::deslocX(){
+float Arena::deslocX(float deltaT){
     return (((this->velocidadeJogadorAtual * 1.3*sqrt(2) * -multiplicadorDeslocamentoY(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
 }
-float Arena::deslocY(){
+float Arena::deslocY(float deltaT){
     return (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
 }
 
@@ -718,19 +718,19 @@ void Arena::decolou(float deltaT)
 
     // cout<<this->direcao<<endl;
     // float deslAux = desl * -multiplicadorDeslocamentoY(this->direcao);
-    andaXjogador(this->deslocX());
+    andaXjogador(this->deslocX( deltaT));
     if (this->encostandoNumInimigo() == 1)
     {
-        andaXjogador(-this->deslocX());
+        andaXjogador(-this->deslocX( deltaT));
         this->addEstadoDecolagem();
     }
 
     // desl = (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
     // deslAux = desl * -multiplicadorDeslocamentoX(this->direcao);
-    andaYjogador(this->deslocY());
+    andaYjogador(this->deslocY( deltaT));
     if (this->encostandoNumInimigo() == 1)
     {
-        andaXjogador(-this->deslocX());
+        andaXjogador(-this->deslocX( deltaT));
         this->addEstadoDecolagem();
     }
     TrataForaDaArena(&jogador_config);

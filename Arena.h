@@ -192,14 +192,15 @@ public:
     void decolou(float deltaT);
     void andaXjogador(float x);
     void andaYjogador(float x);
-    float deslocX();
-    float deslocY();
+    float deslocX(float deltaT);
+    float deslocY(float deltaT);
     float anguloJogador(float x, float y);
     float multiplicadorDeslocamentoY(float angulo);
     float multiplicadorDeslocamentoX(float angulo);
     void curvaAviao(float a)
     {
         this->direcao += a * velocidadeJogadorBase;
+        jogador_config.direcao = this->direcao;
     };
 
     void machaVelocidade(float a)
