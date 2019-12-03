@@ -588,7 +588,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
         glPushMatrix();
             glTranslatef(0, 0, -16*20);//mudar
             
-            glColor3f(0,0.5,0.5); // meu
+            glColor3f(0,0.5,0.5); //meu
             
             glEnable(GL_TEXTURE_2D);
             glPushMatrix();

@@ -176,7 +176,7 @@ void ChangeCoordSys(
 
 
 //
-int zCam = 0, yCam = 0, xCam = 0;
+int zCam = -300, yCam = 500, xCam = 500;
 int camA = 0;
 int angCam = 0;
 
@@ -191,15 +191,11 @@ void display(void)
         if(camA == 0){
             gluPerspective(90, 1, 3, 1000);
             gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
-            printf("%i %i %i\n", xCam,yCam,zCam);
+
             Circle jogadorT = arena_modelo.get_jogador();
-            printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
         }else{
             gluPerspective(90, 1, 1, 700);
-            // printf("%i %i %i\n", xCam,yCam,zCam);
             Circle jogadorT = arena_modelo.get_jogador();
-            // printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
-            // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
             float x2 = jogadorT.get_x() - 500;
             float y2 = jogadorT.get_y() - 500;
             float x1 = jogadorT.get_x() - 500 + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
@@ -210,7 +206,6 @@ void display(void)
 
     glMatrixMode(GL_MODELVIEW);
     
-
     arena_modelo.Desenha();
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
