@@ -236,7 +236,10 @@ void display(void)
         printf("%i %i %i\n", xCam,yCam,zCam);
         Circle jogadorT = arena_modelo.get_jogador();
         printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
-        gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
+        // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
+        float x1 = 0.22380952*jogadorT.get_x()+312.804761;
+        float y1 = 4.121596*jogadorT.get_y()-1876.0794476;
+        gluLookAt(y1, x1, zCam, y1, x1, 1, 0, 1, 0);
     }
     
 
