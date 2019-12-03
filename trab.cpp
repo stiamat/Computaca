@@ -52,6 +52,18 @@ void PrintText(float x, float y, const char * text, double r, double g, double b
     // glMatrixMode (GL_MODELVIEW);
 }
 
+// Desenha um texto na janela GLUT
+void DesenhaTexto(float x, float y, float z,char *string) 
+{  
+  	glPushMatrix();
+        // Posição no universo onde o texto será colocado          
+        glRasterPos3f(x,y,z); 
+        // Exibe caracter a caracter
+        while(*string)
+             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,*string++); 
+	glPopMatrix();
+}
+
 //
 
 void normalize(float a[3])
@@ -201,9 +213,10 @@ void mouse_motion(int x, int y)
 
 
 //
-int zCam = -300, yCam = 500, xCam = 500;
+int zCam = 0, yCam = 0, xCam = 0;
 int camA = 0;
 int angCam = 90;
+
 void display(void)
 {
 
@@ -211,11 +224,16 @@ void display(void)
     glLoadIdentity();
     if(camA == 0){
         gluPerspective(90, 1, 3, 1000);
-        gluLookAt(xCam, yCam, zCam, 500, 500, -1, 0, 1, 0);
+        gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
+        printf("%i %i %i\n", xCam,yCam,zCam);
+        Circle jogadorT = arena_modelo.get_jogador();
+        printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
     }else{
-        Circle jogador = arena_modelo.get_jogador();
         gluPerspective(90, 1, 1, 500);
-        gluLookAt(jogador.get_y(), jogador.get_x(), -100, jogador.get_y(), jogador.get_x(), -1, 0, 1, 0);
+        printf("%i %i %i\n", xCam,yCam,zCam);
+        Circle jogadorT = arena_modelo.get_jogador();
+        printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
+        gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
     }
     
 
@@ -229,25 +247,27 @@ void display(void)
 
     arena_modelo.Desenha();
 
-    if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
-        PrintText(700, 500, "Game Over!!! Aperte 'r' para recomecar!", 1,0,0);
-    }
+    // if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
+    //     PrintText(700, 500, "Game Over!!! Aperte 'r' para recomecar!", 1,0,0);
+    // }
 
     if(basesIniAgr == 0){
-        PrintText(750, 500, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!", 0,1,0);
+        // PrintText(750, 500, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!", 0,1,0);
+        strcpy(textImprimir, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!");
+        DesenhaTexto(750,500,-1,textImprimir);
     }
     
 
-    strcpy(textImprimir, "Bases Inimigas: ");
-    const char c = (basesIni-basesIniAgr) + '0';
-    strcat(textImprimir, &c);
-    PrintText(500-50, 500+280, textImprimir, 1,1,1);
+    // strcpy(textImprimir, "Bases Inimigas: ");
+    // const char c = (basesIni-basesIniAgr) + '0';
+    // strcat(textImprimir, &c);
+    // PrintText(500-50, 500+280, textImprimir, 1,1,1);
 
-    strcpy(textImprimir, "Restam ");
-    const char cc = basesIniAgr + '0';
-    strcat(textImprimir, &cc);
-    strcat(textImprimir, " bases inimigas");
-    PrintText(500-50, 500+260, textImprimir, 1,1,1);
+    // strcpy(textImprimir, "Restam ");
+    // const char cc = basesIniAgr + '0';
+    // strcat(textImprimir, &cc);
+    // strcat(textImprimir, " bases inimigas");
+    // PrintText(500-50, 500+260, textImprimir, 1,1,1);
     
     glutSwapBuffers();
     // glFlush();
@@ -450,7 +470,7 @@ void idle(void)
     }
 
     if(eixo == 0){
-        arena_modelo.colocaAviaoNosEixo();
+        arena_modelo.colocaAviaoNosEixo(arena_reset.get_jogador().get_x(), arena_reset.get_jogador().get_y(), arena_reset.get_jogador().direcao);
     }
 
     if (letras['u'] == 1)

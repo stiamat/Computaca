@@ -16,7 +16,9 @@
 
 
 using namespace std;
-GLUquadricObj *quadratic = gluNewQuadric();
+GLUquadricObj *chao = gluNewQuadric();
+GLUquadricObj *ceu = gluNewQuadric();
+GLUquadricObj *cilindro = gluNewQuadric();
 
 
 Arena::Arena(){};
@@ -220,6 +222,7 @@ void Arena::inputProcessing(char *input)
 
     float auxX = pista_decolagem.get_x2() - jogador_config.get_x(), auxY = pista_decolagem.get_y2() - jogador_config.get_y();
     this->direcao = anguloJogador(auxX, auxY);
+    this->jogador_config.direcao = anguloJogador(auxX, auxY);
 };
 
 void Arena::print()
@@ -478,25 +481,17 @@ void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, fl
     glPopMatrix();
 };
 
-void Arena::DesenhaTexto(char *string)
-{
-    glPushMatrix();
-    // Posição no universo onde o texto será colocado
-    glRasterPos2f(this->arena_config.get_x(), this->arena_config.get_y());
-    // glScalef(2, 2, 0);
-    // Exibe caracter a caracter
-    while (*string)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, *string++);
-    glPopMatrix();
-};
 
 void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista)
 {   
     glPushMatrix();
 
     glTranslatef(arena->get_x(), arena->get_y(), 0);
+    // glTranslatef(arena->get_x(), arena->get_y(), -16*20);
 
-    Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
+    // Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
+    glColor3f(arena->get_corR(), arena->get_corG(), arena->get_corB());
+    gluDisk(chao,0,arena->get_raio(),50,50);
 
     Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
 
@@ -509,7 +504,8 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
     glPushMatrix();
         glTranslatef(0, 0, -16*20);//mudar
         glColor3f(0,0.5,0.5);
-        gluCylinder(quadratic,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar
+        gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar
+        gluDisk(ceu,0,arena->get_raio(),50,50);
     glPopMatrix();
 
     DesenhaBaseInimiga(lista_individuos);
@@ -538,11 +534,11 @@ void Arena::inicioDecolagem()
     }
 };
 
-void Arena::colocaAviaoNosEixo(){
+void Arena::colocaAviaoNosEixo(float x, float y, float direcao){
 
-    this->deltaS = this->distanciaJogadorFimPista();
-    float auxX = pista_decolagem.get_x2() - jogador_config.get_x(), auxY = pista_decolagem.get_y2() - jogador_config.get_y();
-    this->direcao = anguloJogador(auxX, auxY);
+    jogador_config.set_x(x);
+    jogador_config.set_y(y);
+    this->direcao = direcao;
 }
 
 void Arena::decolando()
@@ -657,11 +653,13 @@ void Arena::trocaDeContexto()
 void Arena::andaXjogador(float x)
 {
     this->jogador_config.set_x(this->jogador_config.get_x() + x);
+    
 };
 
 void Arena::andaYjogador(float y)
 {
     this->jogador_config.set_y(this->jogador_config.get_y() + y);
+    
 };
 
 float Arena::anguloJogador(float x, float y)
@@ -923,14 +921,21 @@ void Arena::TrataForaDaArena(Circle* p){
                 p->set_y(y2);
             }
         }else{
-            andaXjogador(-0.1);
-            andaYjogador(-0.1);
-            this->curvaAviao(1);
+            if(p->get_corB() == 1){ //só funfa pra o jogador e tava usando como todos os aviões.. ou seja tava dando erro.
+                andaXjogador(-0.1); //ERRO
+                andaYjogador(-0.1); //ERRO
+                this->curvaAviao(1); //ERRO
+            }else{
+                p->andaXCircle(-0.1);
+                p->andaYCircle(-0.1);
+                p->direcao += 0.5 * p->inimigo_vel;
+            }
+
+            
         }
 
     }else{
         if(saindoPontaArena(p) == 1){
-
             p->yl = p->get_y();
             p->xl = p->get_x();
             this->flag = 1;

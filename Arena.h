@@ -26,6 +26,7 @@ class Arena
 
     // Definição de Jogador
     Circle jogador_config;
+    
     float direcao = 0;
     float thetaCanhao = 0;
     float thetaHelice = 0;
@@ -73,6 +74,7 @@ private:
     int encostandoNumInimigo();
 
 public:
+    
     float inimigo_freqTiro;
     float inimigo_vel;
     float inimigo_vel_tiro;
@@ -173,7 +175,7 @@ public:
         return sqrt(pow(jogador_config.get_x() - pista_decolagem.get_x2(), 2) + pow(jogador_config.get_y() - pista_decolagem.get_y2(), 2));
     };
 
-    void colocaAviaoNosEixo();
+    void colocaAviaoNosEixo(float x, float y, float direcao);
     void inicioDecolagem();
     void decolando();
     void trocaDeContexto();
