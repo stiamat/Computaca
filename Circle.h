@@ -7,7 +7,7 @@
 class Circle{
     int id = 0;
     float raio = 0;
-    float x = 0, y = 0;
+    float x = 0, y = 0, z = 0;
 
     int pontosCirculo = 1000;
     float corR = 0, corG = 0, corB = 0;
@@ -45,6 +45,13 @@ public:
     float get_y();
     void set_x(float p);
     void set_y(float p);
+    void set_z(float p){
+        z = p;
+    };
+    float get_z(){
+        return z;
+    };
+    
 
 
     float get_corR();

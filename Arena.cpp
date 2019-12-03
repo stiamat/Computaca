@@ -332,12 +332,12 @@ void Arena::Desenha_Circulo(float raio, float r, float g, float b)
     glColor3f(r, g, b);
 
     glBegin(GL_POLYGON);
-    for (int ii = 0; ii < 360; ii++)
-    {
-        x = raio * cos(PI * ii / 180);
-        y = raio * sin(PI * ii / 180);
-        glVertex3f(x, y, 0); // cria o vértice
-    }
+        for (int ii = 0; ii < 360; ii++)
+        {
+            x = raio * cos(PI * ii / 180);
+            y = raio * sin(PI * ii / 180);
+            glVertex3f(x, y, 0); // cria o vértice
+        }
     glEnd();
 };
 
@@ -351,11 +351,11 @@ void Arena::Desenha_Individuos(vector<Circle *> *lista_individuos)
     {
         ind = this->individuos[i];
         glPushMatrix();
-        glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
-        if(ind->get_corG() == 0){
-            // cout << ind->direcao << endl;
-            Desenha_Jogador(1, 0, 0, ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
-        }
+            glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
+            if(ind->get_corG() == 0){
+                // cout << ind->direcao << endl;
+                Desenha_Jogador(1, 0, 0, ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
+            }
         glPopMatrix();
     }
 };
@@ -368,26 +368,26 @@ void Arena::DesenhaBaseInimiga(vector<Circle *> *lista_individuos){
     {
         ind = this->individuos[i];
         glPushMatrix();
-        glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
-        if(ind->get_corG() != 0){
-            glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
-            
-            glEnable(GL_TEXTURE_2D);
-            glPushMatrix();
-                    
-                gluQuadricNormals(baseInimiga, GLU_SMOOTH);
-                gluQuadricOrientation(baseInimiga, GLU_OUTSIDE);
-                gluQuadricTexture(baseInimiga, GL_TRUE);
+            glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
+            if(ind->get_corG() != 0){
+                glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
                 
-                glBindTexture (GL_TEXTURE_2D, this->textureBaseInimiga);
-                gluSphere(baseInimiga,ind->get_raio(), 50, 50);
-            glPopMatrix();
-            glDisable(GL_TEXTURE_2D);
+                glEnable(GL_TEXTURE_2D);
+                glPushMatrix();
+                        
+                    gluQuadricNormals(baseInimiga, GLU_SMOOTH);
+                    gluQuadricOrientation(baseInimiga, GLU_OUTSIDE);
+                    gluQuadricTexture(baseInimiga, GL_TRUE);
+                    
+                    glBindTexture (GL_TEXTURE_2D, this->textureBaseInimiga);
+                    gluSphere(baseInimiga,ind->get_raio(), 50, 50);
+                glPopMatrix();
+                glDisable(GL_TEXTURE_2D);
+                
+                // Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
             
-            // Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
-        
-        }
-        
+            }
+            
         glPopMatrix();
     }
 }
@@ -396,10 +396,10 @@ void Arena::Desenha_Retangulo(float height, float width, float r, float g, float
 {
     glColor3f(r, g, b);
     glBegin(GL_POLYGON);
-    glVertex3f(-width / 2, 0, 0.0);
-    glVertex3f(width / 2, 0, 0.0);
-    glVertex3f(width / 2, height, 0.0);
-    glVertex3f(-width / 2, height, 0.0);
+        glVertex3f(-width / 2, 0, 0.0);
+        glVertex3f(width / 2, 0, 0.0);
+        glVertex3f(width / 2, height, 0.0);
+        glVertex3f(-width / 2, height, 0.0);
     glEnd();
 };
 
@@ -407,9 +407,9 @@ void Arena::Desenha_Triangulo(float tam, float r, float g, float b)
 {
     glColor3f(r, g, b);
     glBegin(GL_POLYGON);
-    glVertex2f(0.00f, 0.00f);
-    glVertex2f(0.25f * tam, -0.90f * tam);
-    glVertex2f(-0.25f * tam, -0.90f * tam);
+        glVertex2f(0.00f, 0.00f);
+        glVertex2f(0.25f * tam, -0.90f * tam);
+        glVertex2f(-0.25f * tam, -0.90f * tam);
     glEnd();
 };
 
@@ -426,19 +426,19 @@ void Arena::Desenha_Tiro()
         //cout << canhao << " canhao" << endl;
 
         glPushMatrix();
-        glTranslatef(x, y, 0);
-        glRotatef(-rot, 0, 0, 1);
-        
+            glTranslatef(x, y, 0);
+            glRotatef(-rot, 0, 0, 1);
+            
 
-        if (this->tiros[i]->get_tipo() == 1)
-        {
-            glTranslatef(0, jogador_config.get_raio(), 0);
-            glRotatef(canhao, 0, 0, 1);
+            if (this->tiros[i]->get_tipo() == 1)
+            {
+                glTranslatef(0, jogador_config.get_raio(), 0);
+                glRotatef(canhao, 0, 0, 1);
 
-            // glTranslatef(0, jogador_config.get_raio() / 4, 0);
-        }
+                // glTranslatef(0, jogador_config.get_raio() / 4, 0);
+            }
 
-        this->tiros[i]->Desenha();
+            this->tiros[i]->Desenha();
         glPopMatrix();
     }
 };
@@ -448,109 +448,108 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
     float rot;
 
     glPushMatrix();
-    glTranslatef(x, y, 0);
+        glTranslatef(x, y, 0);
 
-    //========================================
+        //========================================
 
-    glRotatef(-direcao, 0, 0, 1);
+        glRotatef(-direcao, 0, 0, 1);
 
-    //========================================
+        //========================================
 
-    // Desenha_Circulo(raio,0.5,0.5,0.5);
+        // Desenha_Circulo(raio,0.5,0.5,0.5);
 
-    //desenha asa direita
-    glPushMatrix();
-    glTranslatef(raio / 3, -raio / 3, 0);
-    //glScalef(0.1,0.3,1);
-    glRotatef(-15.0, 0, 0, 1);
-    Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
-    glPopMatrix();
+        //desenha asa direita
+        glPushMatrix();
+            glTranslatef(raio / 3, -raio / 3, 0);
+            //glScalef(0.1,0.3,1);
+            glRotatef(-15.0, 0, 0, 1);
+            Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
+        glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(raio / 2 + raio / 10, -raio / 4, 0);
-    Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
-    glPopMatrix();
+        glPushMatrix();
+            glTranslatef(raio / 2 + raio / 10, -raio / 4, 0);
+            Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
+        glPopMatrix();
 
-    //desenha asa esquerda
-    glPushMatrix();
-    glTranslatef(-raio / 3, -raio / 3, 0);
-    //glScalef(0.1,0.3,1);
-    glRotatef(15.0, 0, 0, 1);
-    Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
-    glPopMatrix();
+        //desenha asa esquerda
+        glPushMatrix();
+            glTranslatef(-raio / 3, -raio / 3, 0);
+            //glScalef(0.1,0.3,1);
+            glRotatef(15.0, 0, 0, 1);
+            Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
+        glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(-raio / 2 - raio / 10, -raio / 4, 0);
-    Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
-    glPopMatrix();
+        glPushMatrix();
+            glTranslatef(-raio / 2 - raio / 10, -raio / 4, 0);
+            Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
+        glPopMatrix();
 
-    //canhão
-    glPushMatrix();
-    glTranslatef(0, raio, 0);
-    glRotatef(thetaCanhao, 0, 0, 1);
-    Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
-    glPopMatrix();
+        //canhão
+        glPushMatrix();
+            glTranslatef(0, raio, 0);
+            glRotatef(thetaCanhao, 0, 0, 1);
+            Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
+        glPopMatrix();
 
-    //desenha elipse
-    glPushMatrix();
-    glScalef(0.3, 1, 1);
-    if(ini == 1){
-        Desenha_Circulo(raio, 1, 0, 0);
-    }else{
-        Desenha_Circulo(raio, 0, 0.6, 0);
-    }
+        //desenha elipse
+        glPushMatrix();
+            glScalef(0.3, 1, 1);
+            if(ini == 1){
+                Desenha_Circulo(raio, 1, 0, 0);
+            }else{
+                Desenha_Circulo(raio, 0, 0.6, 0);
+            }
+        glPopMatrix();
 
-    glPopMatrix();
+        glPushMatrix();
+            glTranslatef(0, -raio, 0);
+            Desenha_Retangulo(raio / 2, raio / 10, 0, 0, 0);
+        glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(0, -raio, 0);
-    Desenha_Retangulo(raio / 2, raio / 10, 0, 0, 0);
-    glPopMatrix();
+        //desenha cabine
+        glPushMatrix();
+            glTranslatef(0, raio / 2, 0);
+            glScalef(0.1, 0.3, 1);
+            Desenha_Circulo(raio, 0, 0, 0);
+        glPopMatrix();
 
-    //desenha cabine
-    glPushMatrix();
-    glTranslatef(0, raio / 2, 0);
-    glScalef(0.1, 0.3, 1);
-    Desenha_Circulo(raio, 0, 0, 0);
-    glPopMatrix();
+        //Helice Direita
+        glPushMatrix();
+            glTranslatef(-raio / 2 - raio / 10, raio / 15, 0);
+            rot = 90.0;
+            glRotatef(rot, 0, 0, 1);
+            glPushMatrix();
+                glRotatef(-thetaHelice, 1, 0, 0);
+                Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
+            glPopMatrix();
+            glRotatef(-rot, 0, 0, 1);
 
-    //Helice Direita
-    glPushMatrix();
-    glTranslatef(-raio / 2 - raio / 10, raio / 15, 0);
-    rot = 90.0;
-    glRotatef(rot, 0, 0, 1);
-    glPushMatrix();
-        glRotatef(-thetaHelice, 1, 0, 0);
-        Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
-    glPopMatrix();
-    glRotatef(-rot, 0, 0, 1);
+            rot = -90.0;
+            glRotatef(rot, 0, 0, 1);
+            glPushMatrix();
+                glRotatef(thetaHelice, 1, 0, 0);
+                Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
+            glPopMatrix();
+        glPopMatrix();
 
-    rot = -90.0;
-    glRotatef(rot, 0, 0, 1);
-    glPushMatrix();
-        glRotatef(thetaHelice, 1, 0, 0);
-        Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
-    glPopMatrix();
-    glPopMatrix();
+        //Helice Esquerda
+        glPushMatrix();
+            glTranslatef(+raio / 2 + raio / 10, raio / 15, 0);
+            rot = 90.0;
+            glRotatef(rot, 0, 0, 1);
+            glPushMatrix();
+                glRotatef(thetaHelice, 1, 0, 0);
+                Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
+            glPopMatrix();
+            glRotatef(-rot, 0, 0, 1);
 
-    //Helice Esquerda
-    glPushMatrix();
-    glTranslatef(+raio / 2 + raio / 10, raio / 15, 0);
-    rot = 90.0;
-    glRotatef(rot, 0, 0, 1);
-    glPushMatrix();
-        glRotatef(thetaHelice, 1, 0, 0);
-        Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
-    glPopMatrix();
-    glRotatef(-rot, 0, 0, 1);
-
-    rot = -90.0;
-    glRotatef(rot, 0, 0, 1);
-    glPushMatrix();
-        glRotatef(-thetaHelice, 1, 0, 0);
-        Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
-    glPopMatrix();
-    glPopMatrix();
+            rot = -90.0;
+            glRotatef(rot, 0, 0, 1);
+            glPushMatrix();
+                glRotatef(-thetaHelice, 1, 0, 0);
+                Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
+            glPopMatrix();
+        glPopMatrix();
 
     glPopMatrix();
 };
@@ -558,11 +557,11 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
 void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB)
 {
     glPushMatrix();
-    glColor3f(corR, corG, corB);
-    glBegin(GL_LINES);
-    glVertex3f(x1, y1, 0.0);
-    glVertex3f(x2, y2, 0.0);
-    glEnd();
+        glColor3f(corR, corG, corB);
+        glBegin(GL_LINES);
+            glVertex3f(x1, y1, 0.0);
+            glVertex3f(x2, y2, 0.0);
+        glEnd();
     glPopMatrix();
 };
 
@@ -571,56 +570,53 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 {   
     glPushMatrix();
 
-    glTranslatef(arena->get_x(), arena->get_y(), 0);
-    // glTranslatef(arena->get_x(), arena->get_y(), -16*20);
+        glTranslatef(arena->get_x(), arena->get_y(), 0);
+        // glTranslatef(arena->get_x(), arena->get_y(), -16*20);
 
-    // Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
-    glColor3f(arena->get_corR(), arena->get_corG(), arena->get_corB());
-    gluDisk(chao,0,arena->get_raio(),50,50);
+        // Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
+        glColor3f(arena->get_corR(), arena->get_corG(), arena->get_corB());
+        gluDisk(chao,0,arena->get_raio(),50,50);
 
-    Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
+        Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
 
-    Desenha_Tiro();
+        Desenha_Tiro();
 
-    Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
+        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
 
-    Desenha_Individuos(lista_individuos);
-    
-    glPushMatrix();
-        glTranslatef(0, 0, -16*20);//mudar
+        Desenha_Individuos(lista_individuos);
         
-        glColor3f(0,0.5,0.5); // meu
-        
-        glEnable(GL_TEXTURE_2D);
         glPushMatrix();
+            glTranslatef(0, 0, -16*20);//mudar
             
+            glColor3f(0,0.5,0.5); // meu
+            
+            glEnable(GL_TEXTURE_2D);
+            glPushMatrix();
+                gluQuadricNormals(cilindro, GLU_SMOOTH);
+                gluQuadricOrientation(cilindro, GLU_OUTSIDE);
+                gluQuadricTexture(cilindro, GL_TRUE);
                 
-            gluQuadricNormals(cilindro, GLU_SMOOTH);
-            gluQuadricOrientation(cilindro, GLU_OUTSIDE);
-            gluQuadricTexture(cilindro, GL_TRUE);
-            
-            glBindTexture (GL_TEXTURE_2D, textureParedes);
-            gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar meu
-        glPopMatrix();
-        glDisable(GL_TEXTURE_2D);
+                glBindTexture (GL_TEXTURE_2D, textureParedes);
+                gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar meu
+            glPopMatrix();
+            glDisable(GL_TEXTURE_2D);
 
-        
-        glEnable(GL_TEXTURE_2D);
-        glPushMatrix();
             
+            glEnable(GL_TEXTURE_2D);
+            glPushMatrix();
                 
-            gluQuadricNormals(ceu, GLU_SMOOTH);
-            gluQuadricOrientation(ceu, GLU_OUTSIDE);
-            gluQuadricTexture(ceu, GL_TRUE);
+                gluQuadricNormals(ceu, GLU_SMOOTH);
+                gluQuadricOrientation(ceu, GLU_OUTSIDE);
+                gluQuadricTexture(ceu, GL_TRUE);
+                
+                glBindTexture (GL_TEXTURE_2D, textureCeu);
+                gluDisk(ceu,0,arena->get_raio(),50,50);
+            glPopMatrix();
+            glDisable(GL_TEXTURE_2D);
             
-            glBindTexture (GL_TEXTURE_2D, textureCeu);
-            gluDisk(ceu,0,arena->get_raio(),50,50);
         glPopMatrix();
-        glDisable(GL_TEXTURE_2D);
-        
-    glPopMatrix();
 
-    DesenhaBaseInimiga(lista_individuos);
+        DesenhaBaseInimiga(lista_individuos);
 
     glPopMatrix();
    
@@ -1033,16 +1029,15 @@ void Arena::TrataForaDaArena(Circle* p){
                 p->set_y(y2);
             }
         }else{
-            if(p->get_corB() == 1){ //só funfa pra o jogador e tava usando como todos os aviões.. ou seja tava dando erro.
-                andaXjogador(-0.1); //ERRO
-                andaYjogador(-0.1); //ERRO
-                this->curvaAviao(1); //ERRO
+            if(p->get_corB() == 1){ 
+                andaXjogador(-0.1); 
+                andaYjogador(-0.1); 
+                this->curvaAviao(1); 
             }else{
                 p->andaXCircle(-0.1);
                 p->andaYCircle(-0.1);
                 p->direcao += 0.5 * p->inimigo_vel;
             }
-
             
         }
 
@@ -1063,11 +1058,11 @@ void Arena::atualizaInimigos(float p){
 
     for (int i = 0; i < this->individuos.size(); i++)
     {   
-        int decidir[] = {2,0,1,0,2,1,0,1,2,0};
+        int decidir[] = {2,0,1,4,3,0,2,4,1,0,1,3,4,2,0,3};
         ind = this->individuos[i];
         if(ind->isInimigoVoador == 1 && ind->colisao == 0){
             
-            if(decidir[rand()%9] > 0){
+            if(decidir[rand()%15] > 0){
                 int estado = decidir[rand()%9];
                 if( estado == 1){
                     ind->direcao += 0.5 * ind->inimigo_vel;
@@ -1075,6 +1070,14 @@ void Arena::atualizaInimigos(float p){
 
                 if(estado == 2){
                     ind->direcao -= 0.5 * ind->inimigo_vel;
+                }
+
+                if(estado == 3){
+                    //deslocamento vertical subir 
+                }
+                
+                if(estado == 4){
+                    //deslocamento vertical descer
                 }
             }
 

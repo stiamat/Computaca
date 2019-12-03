@@ -12,6 +12,8 @@
 #define PI 3.1514
 
 using namespace std;
+GLUquadricObj *tiro = gluNewQuadric();
+GLUquadricObj *bomba = gluNewQuadric();
 
 Bala::Bala(){
 
@@ -24,28 +26,30 @@ void Bala::Desenha()
         GLfloat x, y;
         glColor3f(0, 0, 0);
 
-        glBegin(GL_POLYGON);
-        for (int ii = 0; ii < 360; ii++)
-        {
-            x = this->solido.get_raio()/10 * cos(PI * ii / 180);
-            y = this->solido.get_raio()/10 * sin(PI * ii / 180);
-            glVertex3f(x, y, 0); // cria o vértice
-        }
-        glEnd();
+        // glBegin(GL_POLYGON);
+        // for (int ii = 0; ii < 360; ii++)
+        // {
+        //     x = this->solido.get_raio()/10 * cos(PI * ii / 180);
+        //     y = this->solido.get_raio()/10 * sin(PI * ii / 180);
+        //     glVertex3f(x, y, 0); // cria o vértice
+        // }
+        // glEnd();
+        gluSphere(tiro,this->solido.get_raio()/10, 10, 10);
     }
     else
     {
         GLfloat x, y;
         glColor3f(0, 0, 0);
 
-        glBegin(GL_POLYGON);
-        for (int ii = 0; ii < 360; ii++)
-        {
-            x = (this->solido.get_raio() * 0.3) * cos(PI * ii / 180);
-            y = (this->solido.get_raio() * 0.3) * sin(PI * ii / 180);
-            glVertex3f(x, y, 0); // cria o vértice
-        }
-        glEnd();
+        // glBegin(GL_POLYGON);
+        // for (int ii = 0; ii < 360; ii++)
+        // {
+        //     x = (this->solido.get_raio() * 0.3) * cos(PI * ii / 180);
+        //     y = (this->solido.get_raio() * 0.3) * sin(PI * ii / 180);
+        //     glVertex3f(x, y, 0); // cria o vértice
+        // }
+        // glEnd();
+        gluSphere(bomba,this->solido.get_raio()*0.3, 10, 10);
     }
 };
 

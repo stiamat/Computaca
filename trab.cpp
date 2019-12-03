@@ -63,7 +63,7 @@ void DesenhaTexto(float x, float y, float z,char *string)
         glRasterPos3f(x,y,z); 
         // Exibe caracter a caracter
         while(*string)
-             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10,*string++); 
+             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++); 
 	glPopMatrix();
 }
 
@@ -222,82 +222,86 @@ int angCam = 0;
 
 void display(void)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   
 
-    glClear(GL_COLOR_BUFFER_BIT);
-    glLoadIdentity();
-    if(camA == 0){
-        gluPerspective(90, 1, 3, 1000);
-        gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
-        printf("%i %i %i\n", xCam,yCam,zCam);
-        Circle jogadorT = arena_modelo.get_jogador();
-        printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
-    }else{
-        gluPerspective(45, 1, 1, 700);
-        printf("%i %i %i\n", xCam,yCam,zCam);
-        Circle jogadorT = arena_modelo.get_jogador();
-        printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
-        // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
-        float x2 = jogadorT.get_x() - 500;
-        float y2 = jogadorT.get_y() - 500;
-        float x1 = jogadorT.get_x() - 500 + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
-        float y1 = jogadorT.get_y() - 500 + 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
-        
-        gluLookAt(500 - x1, 500 - y1, -4, 500 - x2, 500 - y2, -3, 0, 0, -1);
-        
-        
-    }
+    glMatrixMode(GL_PROJECTION);
+
+        glLoadIdentity();
+        if(camA == 0){
+            gluPerspective(90, 1, 3, 1000);
+            gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
+            printf("%i %i %i\n", xCam,yCam,zCam);
+            Circle jogadorT = arena_modelo.get_jogador();
+            printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
+        }else{
+            gluPerspective(90, 1, 1, 700);
+            // printf("%i %i %i\n", xCam,yCam,zCam);
+            Circle jogadorT = arena_modelo.get_jogador();
+            // printf("%lf %lf \n", jogadorT.get_y(),jogadorT.get_x());
+            // gluLookAt(jogadorT.get_y(), jogadorT.get_x(), -100, jogadorT.get_y(), jogadorT.get_x(), 1, 0, 1, 0);
+            float x2 = jogadorT.get_x() - 500;
+            float y2 = jogadorT.get_y() - 500;
+            float x1 = jogadorT.get_x() - 500 + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
+            float y1 = jogadorT.get_y() - 500 + 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
+            
+            gluLookAt(500 - x1, 500 - y1, -4, 500 - x2, 500 - y2, -3, 0, 0, -1);    
+        }
+
+    glMatrixMode(GL_MODELVIEW);
     
-
-    // printf("%i %i %i\n", xCam,yCam,zCam);
-    // glLoadIdentity();
-    // if (toggleCam == 1){
-    //     glTranslatef(0,0,-camDist);
-    //     glRotatef(camXZAngle,1,0,0);
-    //     glRotatef(camXYAngle,0,1,0);
-    // }
 
     arena_modelo.Desenha();
 
-    // if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
-    //     PrintText(700, 500, "Game Over!!! Aperte 'r' para recomecar!", 1,0,0);
-    // }
+    if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
+        PrintText(700, 500, "Game Over!!! Aperte 'r' para recomecar!", 1,0,0);
+        // strcpy(textImprimir, "Game Over!!! Aperte 'r' para recomecar!");
+        // glPushMatrix();
+            
+        //     DesenhaTexto(750,500,-1,textImprimir);
+        // glPopMatrix();
+    }
 
     if(basesIniAgr == 0){
-        // PrintText(750, 500, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!", 0,1,0);
-        strcpy(textImprimir, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!");
-        DesenhaTexto(750,500,-1,textImprimir);
+        PrintText(750, 500, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!", 0,1,0);
+        // strcpy(textImprimir, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!");
+        // glPushMatrix();
+            
+        //     DesenhaTexto(750,500,-1,textImprimir);
+        // glPopMatrix();
     }
     
 
-    // strcpy(textImprimir, "Bases Inimigas: ");
-    // const char c = (basesIni-basesIniAgr) + '0';
-    // strcat(textImprimir, &c);
-    // PrintText(500-50, 500+280, textImprimir, 1,1,1);
+    strcpy(textImprimir, "Bases Inimigas: ");
+    const char c = (basesIni-basesIniAgr) + '0';
+    strcat(textImprimir, &c);
+    PrintText(500-50, 500+280, textImprimir, 1,1,1);
 
-    // strcpy(textImprimir, "Restam ");
-    // const char cc = basesIniAgr + '0';
-    // strcat(textImprimir, &cc);
-    // strcat(textImprimir, " bases inimigas");
-    // PrintText(500-50, 500+260, textImprimir, 1,1,1);
+    strcpy(textImprimir, "Restam ");
+    const char cc = basesIniAgr + '0';
+    strcat(textImprimir, &cc);
+    strcat(textImprimir, " bases inimigas");
+    PrintText(500-50, 500+260, textImprimir, 1,1,1);
     
-    glutSwapBuffers();
-    // glFlush();
+    
+    glFlush();
+    glutSwapBuffers(); 
 }
 
 void init()
 {
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
     glEnable(GL_DEPTH_TEST);
-    glEnable( GL_TEXTURE_2D );
+    glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LEQUAL);
 
+    // glEnable(GL_DEPTH_TEST);
+    // glDepthMask(GL_FALSE);
+    // glDepthFunc(GL_LESS); 
+
+    // glEnable( GL_TEXTURE_2D );
     // glEnable(GL_LIGHTING);
     // glShadeModel (GL_FLAT);
     // glShadeModel (GL_SMOOTH);
-
-    // glDepthFunc(GL_LEQUAL);
 
     // glOrtho(arena_modelo.ortho_Config(1, 1), arena_modelo.ortho_Config(1, -1), arena_modelo.ortho_Config(2, -1), arena_modelo.ortho_Config(2, 1), -1.0, 1.0);
 }
