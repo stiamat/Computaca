@@ -207,10 +207,10 @@ void Bala::Atualiza(float p)
             float m = (1.0*((4.0-this->time)/4) + 1.0)/2.0;
             this->solido.set_raio(this->raioOriginal*m);
             // cout << this->solido.get_raio() << endl;
-            newdesl = ((get_velocidade() * sqrt(2) * -multX * p)/ 2);
+            newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multX * p)/ 2);
             andaYtiro(newdesl);
 
-            newdesl = ((get_velocidade() * sqrt(2) * -multY * p)/ 2);
+            newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multY * p)/ 2);
             andaXtiro(newdesl);
         }
         
