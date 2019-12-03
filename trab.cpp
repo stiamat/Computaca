@@ -174,46 +174,6 @@ void ChangeCoordSys(
     glMultMatrixf(&m[0][0]);
 }
 
-double camDist=100;
-double camXYAngle=0;
-double camXZAngle=0;
-int toggleCam = 2;
-
-int lastX = 0;
-int lastY = 0;
-int buttonDown=0;
-
-void mouse_callback(int button, int state, 
-        int x, int y) 
-{
-    if (button == GLUT_LEFT_BUTTON && 
-            state == GLUT_DOWN) {
-        lastX = x;
-        lastY = y;
-        buttonDown = 1;
-    } 
-    if (button == GLUT_LEFT_BUTTON && 
-            state == GLUT_UP) {
-        buttonDown = 0;
-    }
-    glutPostRedisplay();
-}
-void mouse_motion(int x, int y)
-{
-    
-    camXYAngle += x - lastX;
-    camXZAngle += y - lastY;
-    
-    camXYAngle = (int)camXYAngle % 360;
-    camXZAngle = (int)camXZAngle % 360;
-    
-    lastX = x;
-    lastY = y;
-    // printf("passei\n");
-
-    glutPostRedisplay();
-}
-
 
 //
 int zCam = 0, yCam = 0, xCam = 0;
@@ -520,12 +480,12 @@ void idle(void)
 
             if (letras['a'] == 1)
             {
-                arena_modelo.curvaAviao(0.6);
+                arena_modelo.curvaAviao(0.9);
             }
 
             if (letras['d'] == 1)
             {
-                arena_modelo.curvaAviao(-0.6);
+                arena_modelo.curvaAviao(-0.9);
             }
 
             if (letras['+'] == 1)
