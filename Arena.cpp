@@ -10,18 +10,90 @@
 #include <unistd.h>
 
 #include "tinyxml/tinyxml.h"
+#include "imageloader.h"
 #include "Arena.h"
 
 #define PI 3.1415
 
 
 using namespace std;
+
 GLUquadricObj *chao = gluNewQuadric();
 GLUquadricObj *ceu = gluNewQuadric();
 GLUquadricObj *cilindro = gluNewQuadric();
+GLUquadricObj *baseInimiga = gluNewQuadric();
 
 
-Arena::Arena(){};
+Arena::Arena(){
+    this->textureBaseInimiga = LoadTextureRAW("stars1.bmp");
+    this->textureChao = LoadTextureRAW("stars1.bmp");
+    this->textureCeu = LoadTextureRAW("stars1.bmp");
+    this->textureParedes = LoadTextureRAW("stars1.bmp");
+    this->textureAviao = LoadTextureRAW("stars1.bmp");
+};
+
+// --- Texture
+
+GLuint Arena::LoadTextureRAW( const char * filename )
+{
+
+    GLuint texture;
+    
+    Image* image = loadBMP(filename);
+
+    glGenTextures( 1, &texture );
+    glBindTexture( GL_TEXTURE_2D, texture );
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR );
+    glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
+                             0,                            //0 for now
+                             GL_RGB,                       //Format OpenGL uses for image
+                             image->width, image->height,  //Width and height
+                             0,                            //The border of the image
+                             GL_RGB, //GL_RGB, because pixels are stored in RGB format
+                             GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
+                                               //as unsigned numbers
+                             image->pixels);               //The actual pixel data
+    delete image;
+
+    return texture;
+}
+
+// GLuint textureBaseInimiga = LoadTextureRAW("stars1.bmp");
+// GLuint textureChao = LoadTextureRAW("stars1.bmp");
+// GLuint textureCeu = LoadTextureRAW("stars1.bmp");
+// GLuint textureParedes = LoadTextureRAW("stars1.bmp");
+// GLuint textureAviao;
+
+void DisplayBaseinimiga (GLuint texture)
+{
+    GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+    GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+    GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+    GLfloat mat_shininess[] = { 100.0 };
+    glColor3f(0.5,0.5,0);
+ 
+    glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+    glBindTexture (GL_TEXTURE_2D, texture);
+    
+    // glBegin (GL_TRIANGLE_STRIP);
+    // for ( int i = 0; i <objEarth->numVtx; i++)
+    // {
+    //     glNormal3f(objEarth->vtx[i].nX, objEarth->vtx[i].nY, objEarth->vtx[i].nZ);
+    //     glTexCoord2f (objEarth->vtx[i].U, objEarth->vtx[i].V);
+    //     glVertex3f (objEarth->vtx[i].X, objEarth->vtx[i].Y, objEarth->vtx[i].Z);
+    // }
+    // glEnd();
+}
+// ---
+
 
 void Arena::add_individuos(int x, int y, int raio, float r, float g, float b, int id)
 {
@@ -299,8 +371,21 @@ void Arena::DesenhaBaseInimiga(vector<Circle *> *lista_individuos){
         glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
         if(ind->get_corG() != 0){
             glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
-            glutSolidSphere(ind->get_raio(), 50, 50);
+            
+            glEnable(GL_TEXTURE_2D);
+            glPushMatrix();
+                    
+                gluQuadricNormals(baseInimiga, GLU_SMOOTH);
+                gluQuadricOrientation(baseInimiga, GLU_OUTSIDE);
+                gluQuadricTexture(baseInimiga, GL_TRUE);
+                
+                glBindTexture (GL_TEXTURE_2D, this->textureBaseInimiga);
+                gluSphere(baseInimiga,ind->get_raio(), 50, 50);
+            glPopMatrix();
+            glDisable(GL_TEXTURE_2D);
+            
             // Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
+        
         }
         
         glPopMatrix();
@@ -503,9 +588,36 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
     
     glPushMatrix();
         glTranslatef(0, 0, -16*20);//mudar
-        glColor3f(0,0.5,0.5);
-        gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar
-        gluDisk(ceu,0,arena->get_raio(),50,50);
+        
+        glColor3f(0,0.5,0.5); // meu
+        
+        glEnable(GL_TEXTURE_2D);
+        glPushMatrix();
+            
+                
+            gluQuadricNormals(cilindro, GLU_SMOOTH);
+            gluQuadricOrientation(cilindro, GLU_OUTSIDE);
+            gluQuadricTexture(cilindro, GL_TRUE);
+            
+            glBindTexture (GL_TEXTURE_2D, textureParedes);
+            gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar meu
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+
+        
+        glEnable(GL_TEXTURE_2D);
+        glPushMatrix();
+            
+                
+            gluQuadricNormals(ceu, GLU_SMOOTH);
+            gluQuadricOrientation(ceu, GLU_OUTSIDE);
+            gluQuadricTexture(ceu, GL_TRUE);
+            
+            glBindTexture (GL_TEXTURE_2D, textureCeu);
+            gluDisk(ceu,0,arena->get_raio(),50,50);
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+        
     glPopMatrix();
 
     DesenhaBaseInimiga(lista_individuos);

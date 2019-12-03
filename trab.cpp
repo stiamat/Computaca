@@ -19,7 +19,10 @@ int basesIniAgr = 0;
 int eixo = 0;
 char textImprimir[1000];
 
+
+
 // --------------------------------
+
 
 void RasterChars(float x, float y, float z, const char * text, double r, double g, double b)
 {
@@ -278,7 +281,16 @@ void init()
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable( GL_TEXTURE_2D );
+
+    // glEnable(GL_LIGHTING);
+    // glShadeModel (GL_FLAT);
+    // glShadeModel (GL_SMOOTH);
+
+    // glDepthFunc(GL_LEQUAL);
+
     // glOrtho(arena_modelo.ortho_Config(1, 1), arena_modelo.ortho_Config(1, -1), arena_modelo.ortho_Config(2, -1), arena_modelo.ortho_Config(2, 1), -1.0, 1.0);
 }
 

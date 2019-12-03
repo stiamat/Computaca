@@ -10,12 +10,13 @@ one:
 	g++ -c Line.cpp -o line.o
 	g++ -c Arena.cpp -o arena.o
 	g++ -c Bala.cpp -o bala.o
-	g++ -o trabalhocg trab.cpp  tinyxml.o tinyxmlparser.o tinyxmlerror.o tinystr.o circle.o line.o arena.o bala.o -lGL -lGLU -lglut -lm
+	g++ -c imageloader.cpp -o imageloader.o
+	g++ -o trabalhocg trab.cpp  tinyxml.o tinyxmlparser.o tinyxmlerror.o tinystr.o circle.o line.o arena.o bala.o imageloader.o -lGL -lGLU -lglut -lm
 	@echo compile ready!
 	@echo
 
-run:
-	./trabalhocg ../Test_1/
+run: one
+	./trabalhocg ./
 	@echo test completed!
 	@echo 
 

@@ -16,6 +16,14 @@ using namespace std;
 
 class Arena
 {
+    //-----------
+    GLuint textureBaseInimiga;
+    GLuint textureChao;
+    GLuint textureCeu;
+    GLuint textureParedes;
+    GLuint textureAviao;
+
+    //------------
 
     char *nome;
 
@@ -60,6 +68,7 @@ class Arena
 
     //------------------------
 private:
+    
     void Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista);
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
@@ -81,6 +90,7 @@ public:
     //Arena
     Arena();
 
+    GLuint LoadTextureRAW( const char * filename );
     void inputProcessing(char *input);
     void add_individuos(int x, int y, int raio, float r, float g, float b, int id);
     void set_partida(int x1, int y1, int x2, int y2, float r, float g, float b, int id);
