@@ -66,6 +66,9 @@ public:
     float get_y();
     void set_y(float p);
 
+    float get_z();
+    void set_z(float p);
+
     float get_raio();
     void set_raio(float p);
 

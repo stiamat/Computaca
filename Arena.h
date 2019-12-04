@@ -72,7 +72,7 @@ private:
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
     void Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
-    void Desenha_Jogador(int ini, float x, float y, float raio, float thetaCanhao, float thetaHelice, float direcao);
+    void Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao);
     void Desenha_Circulo(float raio, float r, float g, float b);
     void Desenha_Retangulo(float height, float width, float r, float g, float b);
     void Desenha_Triangulo(float tam, float r, float g, float b);

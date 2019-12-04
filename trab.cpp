@@ -193,7 +193,7 @@ void display(void){
             float x1 = jogadorT.get_x() - 500 + 5*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
             float y1 = jogadorT.get_y() - 500 + 5*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
             
-            gluLookAt(500 - x1, 500 - y1, jogadorT.get_z()-30, 500 - x2, 500 - y2, jogadorT.get_z()-25, 0, 0, -1);    
+            gluLookAt(500 - x1, 500 - y1, jogadorT.get_z()-15, 500 - x2, 500 - y2, jogadorT.get_z()-13, 0, 0, -1);    
         }
 
     glMatrixMode(GL_MODELVIEW);

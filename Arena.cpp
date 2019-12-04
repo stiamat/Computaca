@@ -326,7 +326,7 @@ void Arena::Desenha_Individuos(vector<Circle *> *lista_individuos)
             glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
             if(ind->get_corG() == 0){
                 // cout << ind->direcao << endl;
-                Desenha_Jogador(1, 0, 0, ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
+                Desenha_Jogador(1, 0, 0, ind->get_z(), ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
             }
         glPopMatrix();
     }
@@ -418,12 +418,12 @@ void Arena::Desenha_Tiro()
     }
 };
 
-void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCanhao, float thetaHelice, float direcao)
+void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao)
 {
     float rot;
 
     glPushMatrix();
-        glTranslatef(x, y, -100);
+        glTranslatef(x, y, z);
 
         //========================================
 
@@ -696,7 +696,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 
         Desenha_Tiro();
 
-        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
+        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_z(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
 
         Desenha_Individuos(lista_individuos);
         
@@ -760,6 +760,8 @@ void Arena::colocaAviaoNosEixo(float x, float y, float direcao){
 
     jogador_config.set_x(x);
     jogador_config.set_y(y);
+    jogador_config.set_z(-5);
+    jogador_config.set_raio(20);
     this->direcao = direcao;
 }
 
@@ -771,18 +773,21 @@ void Arena::decolando()
     if (distanciaJogadorFimPista() < (this->deltaS / 2))
     {
         float m = ((2.0 * (this->deltaS / 2)) - distanciaJogadorFimPista()) / (this->deltaS / 2.0);
-        float novoRaio = this->raioOriginalJogador * m;
-        this->jogador_config.set_raio(novoRaio);
+        // float novoRaio = this->raioOriginalJogador * m;
+        // this->jogador_config.set_raio(novoRaio);
+        float z1 = m * 50;
+        this->jogador_config.set_z(-z1); 
+        printf("%f\n",this->jogador_config.get_z());
     }
     else
     {
-        this->jogador_config.set_raio(this->raioOriginalJogador);
+        // this->jogador_config.set_raio(this->raioOriginalJogador);
     }
 
     if (tempoAgr > 4.0)
     {
         addEstadoDecolagem();
-        this->jogador_config.set_raio(2 * raioOriginalJogador);
+        // this->jogador_config.set_raio(2 * raioOriginalJogador);
         this->jogador_config.set_x(this->pista_decolagem.get_x2());
         this->jogador_config.set_y(this->pista_decolagem.get_y2());
         this->velocidadeJogadorAtual = sqrt(pow(this->velocidadeJogadorXAtual, 2) + pow(this->velocidadeJogadorYAtual, 2));
@@ -814,8 +819,7 @@ float Arena::deslocY(float deltaT){
     return (((this->velocidadeJogadorAtual  * 1.3*sqrt(2) * -multiplicadorDeslocamentoX(this->direcao)) * this->velocidadeJogadorBase) * deltaT) / 2;
 }
 
-void Arena::decolou(float deltaT)
-{
+void Arena::decolou(float deltaT){
     this->timeNew = glutGet(GLUT_ELAPSED_TIME);
     this->deltaT = (this->timeNew - this->timeOld) / 1000.0;
 
@@ -848,8 +852,7 @@ void Arena::decolou(float deltaT)
 };
 
 //Função encostar num inimigo
-int Arena::encostandoNumInimigo()
-{
+int Arena::encostandoNumInimigo(){
     for (int i = 0; i < this->individuos.size(); i++)
     {
         Circle *aux = this->individuos[i];
@@ -866,26 +869,22 @@ int Arena::encostandoNumInimigo()
     return 0;
 }
 
-void Arena::trocaDeContexto()
-{
+void Arena::trocaDeContexto(){
     addEstadoDecolagem();
     this->timeOld = this->timeNew;
 };
 
-void Arena::andaXjogador(float x)
-{
+void Arena::andaXjogador(float x){
     this->jogador_config.set_x(this->jogador_config.get_x() + x);
     
 };
 
-void Arena::andaYjogador(float y)
-{
+void Arena::andaYjogador(float y){
     this->jogador_config.set_y(this->jogador_config.get_y() + y);
     
 };
 
-float Arena::anguloJogador(float x, float y)
-{
+float Arena::anguloJogador(float x, float y){
     float hip = sqrt(pow(0 - x, 2) + pow(0 - y, 2));
     
     float angulo = asin(abs(x) / hip) * 180 / PI;
@@ -914,13 +913,11 @@ float Arena::anguloJogador(float x, float y)
     }
 };
 
-float Arena::multiplicadorDeslocamentoX(float angulo)
-{
+float Arena::multiplicadorDeslocamentoX(float angulo){
     return cos(angulo * PI / 180.0) * this->velocidadeJogadorBase;
 };
 
-float Arena::multiplicadorDeslocamentoY(float angulo)
-{
+float Arena::multiplicadorDeslocamentoY(float angulo){
     return sin(angulo * PI / 180.0) * this->velocidadeJogadorBase;
 };
 
@@ -955,6 +952,7 @@ void Arena::tiro(int tipo)
     nova->set_Iniy(yJ);
     nova->set_x(-xT);
     nova->set_y(-yT);
+    nova->set_z(jogador_config.get_z());
 
     this->tiros.push_back(nova);
 };
@@ -990,6 +988,7 @@ void Arena::tiroInimigo(Circle* ind){
             nova->set_Iniy(yJ);
             nova->set_x(-xT);
             nova->set_y(-yT);
+            nova->set_z(ind->get_z());
 
             this->tiros.push_back(nova);
         }
@@ -997,8 +996,7 @@ void Arena::tiroInimigo(Circle* ind){
     
 };
 
-void Arena::limpaTiros()
-{
+void Arena::limpaTiros(){
 
     for (int i = 0; i < this->tiros.size(); i++)
     {
@@ -1034,8 +1032,7 @@ void Arena::limpaTiros()
     }
 };
 
-void Arena::atualizaTiros(float p)
-{
+void Arena::atualizaTiros(float p){
     this->limpaTiros();
 
     for (int i = 0; i < this->tiros.size(); i++)

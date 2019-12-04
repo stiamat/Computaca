@@ -142,6 +142,13 @@ void Bala::set_x(float p)
     this->solido.set_x(p);
 };
 
+float Bala::get_z(){
+    return this->solido.get_z();
+};
+void Bala::set_z(float p){
+    this->solido.set_z(p);
+};
+
 float Bala::get_y()
 {
     return this->solido.get_y();
