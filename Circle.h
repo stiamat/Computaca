@@ -7,7 +7,7 @@
 class Circle{
     int id = 0;
     float raio = 0;
-    float x = 0, y = 0, z = 0;
+    float x = 0, y = 0, z = -100;
 
     int pontosCirculo = 1000;
     float corR = 0, corG = 0, corB = 0;

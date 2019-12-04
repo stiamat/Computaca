@@ -23,6 +23,9 @@ GLUquadricObj *ceu = gluNewQuadric();
 GLUquadricObj *cilindro = gluNewQuadric();
 GLUquadricObj *baseInimiga = gluNewQuadric();
 
+GLUquadricObj *avCorpo = gluNewQuadric();
+
+
 
 Arena::Arena(){
     this->textureBaseInimiga = LoadTextureRAW("stars1.bmp");
@@ -426,7 +429,7 @@ void Arena::Desenha_Tiro()
         //cout << canhao << " canhao" << endl;
 
         glPushMatrix();
-            glTranslatef(x, y, 0);
+            glTranslatef(x, y, -100);
             glRotatef(-rot, 0, 0, 1);
             
 
@@ -448,7 +451,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
     float rot;
 
     glPushMatrix();
-        glTranslatef(x, y, 0);
+        glTranslatef(x, y, -100);
 
         //========================================
 
@@ -457,6 +460,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float raio, float thetaCa
         //========================================
 
         // Desenha_Circulo(raio,0.5,0.5,0.5);
+        Desenha_Esfera(20,avCorpo,this->textureAviao);
 
         //desenha asa direita
         glPushMatrix();
@@ -565,6 +569,33 @@ void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, fl
     glPopMatrix();
 };
 
+void Arena::Desenha_Esfera(int raio, GLUquadric* base, GLuint text){
+    GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+    GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+    GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+    GLfloat mat_shininess[] = { 100.0 };
+    glColor3f(1,0,1); //meu
+
+    glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+            
+        gluQuadricNormals(base, GLU_SMOOTH);
+        gluQuadricOrientation(base, GLU_OUTSIDE);
+        gluQuadricTexture(base, GL_TRUE);
+        
+        glBindTexture (GL_TEXTURE_2D, text);
+        gluSphere(base,raio, 50, 50);
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+};
+
 void Arena::Desenha_Chao(){
 
     glPushMatrix();
@@ -609,14 +640,6 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
         
         Desenha_Chao();
 
-        Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
-
-        Desenha_Tiro();
-
-        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
-
-        Desenha_Individuos(lista_individuos);
-        
         glPushMatrix();
             glTranslatef(0, 0, -16*20);//mudar
             
@@ -643,6 +666,18 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
                 gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar meu
             glDisable(GL_TEXTURE_2D);
         glPopMatrix();
+
+        DesenhaBaseInimiga(lista_individuos);
+
+        Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
+
+        Desenha_Tiro();
+
+        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
+
+        Desenha_Individuos(lista_individuos);
+        
+        
 
         // glPushMatrix();
         //     glTranslatef(0, 0, -16*20);//mudar
@@ -672,7 +707,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
             
         // glPopMatrix();
 
-        DesenhaBaseInimiga(lista_individuos);
+        
 
     glPopMatrix();
    
