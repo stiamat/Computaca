@@ -7,7 +7,7 @@
 #include "Arena.h"
 
 using namespace std;
-Arena arena_modelo, arena_reset;
+Arena arena_modelo = Arena(), arena_reset = Arena();
 
 // ------- Variaveis Globais ------
 float timeOld = 0;
@@ -206,6 +206,10 @@ void display(void)
 
     glMatrixMode(GL_MODELVIEW);
     
+    GLfloat light_position[] = { 500.0, 500.0, -250.0, 1.0 };
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+
     arena_modelo.Desenha();
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
@@ -239,24 +243,26 @@ void display(void)
     PrintText(500-50, 500+260, textImprimir, 1,1,1);
     
     
-    glFlush();
+    //glFlush();
     glutSwapBuffers(); 
 }
 
 void init()
 {
     glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
-    glDepthFunc(GL_LEQUAL);
+    // glDepthRange(0,700);
+    // glDepthMask(GLU_TRUE);
+    // glDepthFunc(GL_LESS);
 
     // glEnable(GL_DEPTH_TEST);
     // glDepthMask(GL_FALSE);
     // glDepthFunc(GL_LESS); 
 
     // glEnable( GL_TEXTURE_2D );
-    // glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
     // glShadeModel (GL_FLAT);
-    // glShadeModel (GL_SMOOTH);
+    glShadeModel (GL_SMOOTH);
 
     // glOrtho(arena_modelo.ortho_Config(1, 1), arena_modelo.ortho_Config(1, -1), arena_modelo.ortho_Config(2, -1), arena_modelo.ortho_Config(2, 1), -1.0, 1.0);
 }

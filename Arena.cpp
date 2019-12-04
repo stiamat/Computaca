@@ -565,6 +565,36 @@ void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, fl
     glPopMatrix();
 };
 
+void Arena::Desenha_Chao(){
+
+    glPushMatrix();
+
+        GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+        GLfloat materialColorA[] = { 0.5, 0.5, 0.5, 1};
+        GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+        GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+        GLfloat mat_shininess[] = { 100.0 };
+        glColor3f(0,0.5,0.5); //meu
+    
+        glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+        
+
+        glEnable(GL_TEXTURE_2D);
+            gluQuadricNormals(chao, GLU_SMOOTH);
+            gluQuadricOrientation(chao,  GLU_INSIDE);
+            gluQuadricTexture(chao, GL_TRUE);
+            
+            glBindTexture (GL_TEXTURE_2D, textureChao);
+            gluDisk(chao,0,this->arena_config.get_raio(),50,50);
+        glDisable(GL_TEXTURE_2D);
+        
+    glPopMatrix();
+}
+
 
 void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista)
 {   
@@ -575,7 +605,9 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 
         // Desenha_Circulo(arena->get_raio(), arena->get_corR(), arena->get_corG(), arena->get_corB());
         glColor3f(arena->get_corR(), arena->get_corG(), arena->get_corB());
-        gluDisk(chao,0,arena->get_raio(),50,50);
+        
+        
+        Desenha_Chao();
 
         Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
 
@@ -588,33 +620,57 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
         glPushMatrix();
             glTranslatef(0, 0, -16*20);//mudar
             
+            GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+            GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+            GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_shininess[] = { 100.0 };
             glColor3f(0,0.5,0.5); //meu
+        
+            glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+            glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+            glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+            
             
             glEnable(GL_TEXTURE_2D);
-            glPushMatrix();
                 gluQuadricNormals(cilindro, GLU_SMOOTH);
-                gluQuadricOrientation(cilindro, GLU_OUTSIDE);
+                gluQuadricOrientation(cilindro, GLU_INSIDE);
                 gluQuadricTexture(cilindro, GL_TRUE);
                 
                 glBindTexture (GL_TEXTURE_2D, textureParedes);
                 gluCylinder(cilindro,arena->get_raio(),arena->get_raio(),16*20,50,50);//mudar meu
-            glPopMatrix();
             glDisable(GL_TEXTURE_2D);
-
-            
-            glEnable(GL_TEXTURE_2D);
-            glPushMatrix();
-                
-                gluQuadricNormals(ceu, GLU_SMOOTH);
-                gluQuadricOrientation(ceu, GLU_OUTSIDE);
-                gluQuadricTexture(ceu, GL_TRUE);
-                
-                glBindTexture (GL_TEXTURE_2D, textureCeu);
-                gluDisk(ceu,0,arena->get_raio(),50,50);
-            glPopMatrix();
-            glDisable(GL_TEXTURE_2D);
-            
         glPopMatrix();
+
+        // glPushMatrix();
+        //     glTranslatef(0, 0, -16*20);//mudar
+            
+        //     GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+        //     GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+        //     GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+        //     GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+        //     GLfloat mat_shininess[] = { 100.0 };
+        //     glColor3f(0,0.5,0.5); //meu
+        
+        //     glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+        //     glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+        //     glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+        //     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        //     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+            
+
+        //     glEnable(GL_TEXTURE_2D);
+        //         gluQuadricNormals(ceu, GLU_SMOOTH);
+        //         gluQuadricOrientation(ceu, GLU_OUTSIDE);
+        //         gluQuadricTexture(ceu, GL_TRUE);
+                
+        //         glBindTexture (GL_TEXTURE_2D, textureCeu);
+        //         gluDisk(ceu,0,arena->get_raio(),50,50);
+        //     glDisable(GL_TEXTURE_2D);
+            
+        // glPopMatrix();
 
         DesenhaBaseInimiga(lista_individuos);
 

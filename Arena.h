@@ -70,6 +70,7 @@ class Arena
 private:
     
     void Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista);
+    void Desenha_Chao();
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
     void Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
