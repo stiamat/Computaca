@@ -7,7 +7,7 @@
 #include "Arena.h"
 
 using namespace std;
-Arena arena_modelo = Arena(), arena_reset = Arena();
+Arena arena_modelo, arena_reset;
 
 // ------- Variaveis Globais ------
 float timeOld = 0;
@@ -60,7 +60,8 @@ void DesenhaTexto(float x, float y, float z,char *string)
 {  
   	glPushMatrix();
         // Posição no universo onde o texto será colocado          
-        glRasterPos3f(x,y,z); 
+        glRasterPos3f(x,y,z);
+        glColor3f(0,0,0); 
         // Exibe caracter a caracter
         while(*string)
              glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++); 
@@ -69,24 +70,20 @@ void DesenhaTexto(float x, float y, float z,char *string)
 
 //
 
-void normalize(float a[3])
-{
+void normalize(float a[3]){
     double norm = sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]); 
     a[0] /= norm;
     a[1] /= norm;
     a[2] /= norm;
 }
-void cross(float a[3], float b[3], float c[3])
-{
+
+void cross(float a[3], float b[3], float c[3]){
     c[0] = a[1]*b[2] - a[2]*b[1];
     c[1] = a[2]*b[0] - a[0]*b[2];
     c[2] = a[0]*b[1] - a[1]*b[0];
 }
 
-void MygluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx,
-      GLdouble centery, GLdouble centerz, GLdouble upx, GLdouble upy,
-      GLdouble upz)
-{
+void MygluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx,GLdouble centery, GLdouble centerz, GLdouble upx, GLdouble upy,GLdouble upz){
     float forward[3], side[3], up[3];
     //column-major order
     GLfloat m[4][4] = { 1,0,0,0,
@@ -128,11 +125,7 @@ void MygluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx,
     glTranslated(-eyex, -eyey, -eyez);
 }
 
-void ChangeCoordSys(
-        GLdouble ax, GLdouble ay, GLdouble az, 
-        GLdouble bx, GLdouble by, GLdouble bz, 
-        GLdouble cx, GLdouble cy, GLdouble cz)
-{
+void ChangeCoordSys(GLdouble ax, GLdouble ay, GLdouble az, GLdouble bx, GLdouble by, GLdouble bz, GLdouble cx, GLdouble cy, GLdouble cz){
     float z[3], side[3], up[3];
     GLfloat m[4][4] = { 1,0,0,0,
                         0,1,0,0,
@@ -180,8 +173,7 @@ int zCam = -300, yCam = 500, xCam = 500;
 int camA = 0;
 int angCam = 0;
 
-void display(void)
-{
+void display(void){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    
 
@@ -206,7 +198,7 @@ void display(void)
 
     glMatrixMode(GL_MODELVIEW);
     
-    GLfloat light_position[] = { 500.0, 500.0, -250.0, 1.0 };
+    GLfloat light_position[] = { 500.0, 500.0, -16*20, 0.7 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 
@@ -247,28 +239,31 @@ void display(void)
     glutSwapBuffers(); 
 }
 
-void init()
-{
-    glEnable(GL_DEPTH_TEST);
-    // glDepthRange(0,700);
-    // glDepthMask(GLU_TRUE);
-    // glDepthFunc(GL_LESS);
+void init(){
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glEnable(GL_DEPTH_TEST);
     // glEnable(GL_DEPTH_TEST);
     // glDepthMask(GL_FALSE);
     // glDepthFunc(GL_LESS); 
 
-    // glEnable( GL_TEXTURE_2D );
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
     // glShadeModel (GL_FLAT);
     glShadeModel (GL_SMOOTH);
 
     // glOrtho(arena_modelo.ortho_Config(1, 1), arena_modelo.ortho_Config(1, -1), arena_modelo.ortho_Config(2, -1), arena_modelo.ortho_Config(2, 1), -1.0, 1.0);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
-void motion(int x, int y)
-{
+void motion(int x, int y){
     if (deltaXold == 0)
     {
         deltaXold = x;
@@ -279,19 +274,18 @@ void motion(int x, int y)
     }
     if (x - deltaXold > 0)
     {
-        arena_modelo.miraCanhao(3);
+        arena_modelo.miraCanhao(1);
         deltaXold = x;
         //cout << "entrei" << endl;
     }
     if (x - deltaXold < 0)
     {
-        arena_modelo.miraCanhao(-3);
+        arena_modelo.miraCanhao(-1);
         deltaXold = x;
     }
 }
 
-void mouse(int button, int state, int x, int y)
-{
+void mouse(int button, int state, int x, int y){
 
     deltaX = x;
     deltaY = y;
@@ -329,8 +323,7 @@ void mouse(int button, int state, int x, int y)
     }
 }
 
-void keyPress(unsigned char key, int x, int y)
-{
+void keyPress(unsigned char key, int x, int y){
     switch (key)
     {
     case '0':
@@ -403,8 +396,7 @@ void keyPress(unsigned char key, int x, int y)
     }
 }
 
-void keyup(unsigned char key, int x, int y)
-{
+void keyup(unsigned char key, int x, int y){
     switch (key)
     {
     case '1':
@@ -436,8 +428,7 @@ void keyup(unsigned char key, int x, int y)
     }
 }
 
-void idle(void)
-{   
+void idle(void){   
     float timeNew = glutGet(GLUT_ELAPSED_TIME);
     float deltaT = (timeNew - timeOld) / 1000.0;
 
@@ -509,8 +500,7 @@ void idle(void)
     glutPostRedisplay();
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
     //Carregando Dados
 
     arena_modelo.inputProcessing(argv[1]);
@@ -519,11 +509,21 @@ int main(int argc, char **argv)
     basesIni = arena_modelo.BasesInimigas();
 
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("trabalho 4");
     init();
+    
+    // glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_BLEND);
+    // glDepthMask(true);
+    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("Blue_evein.bmp");
+    arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
+    arena_modelo.textureBala = arena_modelo.LoadTextureRAW("largada.bmp");
+    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("Blue_evein.bmp");
+    arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+    arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
 
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyup);

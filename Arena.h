@@ -17,11 +17,7 @@ using namespace std;
 class Arena
 {
     //-----------
-    GLuint textureBaseInimiga;
-    GLuint textureChao;
-    GLuint textureCeu;
-    GLuint textureParedes;
-    GLuint textureAviao;
+    
 
     //------------
 
@@ -71,7 +67,8 @@ private:
     
     void Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista);
     void Desenha_Chao();
-    void Desenha_Esfera(int raio, GLUquadric* base, GLuint text);
+    void Desenha_Esfera(int raio, GLuint text);
+    void Desenha_Cubo(int raio, GLuint text);
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
     void Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
@@ -80,12 +77,20 @@ private:
     void Desenha_Retangulo(float height, float width, float r, float g, float b);
     void Desenha_Triangulo(float tam, float r, float g, float b);
     void Desenha_Tiro();
+    void Desenha_Parede();
     void Aceleracao();
     void DesenhaTexto(char *string);
     int encostandoNumInimigo();
 
 public:
-    
+    GLuint textureParedes;
+    GLuint textureBaseInimiga;
+    GLuint textureChao;
+    GLuint textureCeu;
+    GLuint textureAviao;
+    GLuint textureAviaoIni;
+    GLuint textureBala;
+
     float inimigo_freqTiro;
     float inimigo_vel;
     float inimigo_vel_tiro;

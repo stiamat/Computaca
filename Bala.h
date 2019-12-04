@@ -24,7 +24,7 @@ public:
 
     Bala();
 
-    void Desenha();
+    void Desenha(GLint texte);
     void Atualiza(float p);
 
     int get_tipo();
