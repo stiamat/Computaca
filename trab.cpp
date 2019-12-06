@@ -533,7 +533,7 @@ int main(int argc, char **argv){
     arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("wxp.bmp");
     arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
     arena_modelo.textureBala = arena_modelo.LoadTextureRAW("largada.bmp");
-    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("mar.bmp");
+    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("grass.bmp");
     arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
     arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
 
