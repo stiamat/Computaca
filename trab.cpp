@@ -198,7 +198,7 @@ void display(void){
 
     glMatrixMode(GL_MODELVIEW);
     
-    GLfloat light_position[] = { 500.0, 500.0, -16*20, 0.7 };
+    GLfloat light_position[] = { 500.0, 500.0, -16*20, 1 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 
@@ -379,6 +379,12 @@ void keyPress(unsigned char key, int x, int y){
     case 'd':
         letras['d'] = 1;
         break;
+    case 'w':
+        letras['w'] = 1;
+        break;
+    case 's':
+        letras['s'] = 1;
+        break;
     case 'u':
         letras['u'] = 1;
         break;
@@ -410,6 +416,12 @@ void keyup(unsigned char key, int x, int y){
         break;
     case 'd':
         letras['d'] = 0;
+        break;
+    case 'w':
+        letras['w'] = 0;
+        break;
+    case 's':
+        letras['s'] = 0;
         break;
     case 'u':
         letras['u'] = 0;
@@ -518,10 +530,10 @@ int main(int argc, char **argv){
     // glEnable(GL_DEPTH_TEST);
     // glEnable(GL_BLEND);
     // glDepthMask(true);
-    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("ceu.bmp");
+    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("wxp.bmp");
     arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
     arena_modelo.textureBala = arena_modelo.LoadTextureRAW("largada.bmp");
-    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("Blue_evein.bmp");
+    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("mar.bmp");
     arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
     arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
 
