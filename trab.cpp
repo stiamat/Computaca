@@ -518,11 +518,11 @@ int main(int argc, char **argv){
     // glEnable(GL_DEPTH_TEST);
     // glEnable(GL_BLEND);
     // glDepthMask(true);
-    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("Blue_evein.bmp");
+    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("ceu.bmp");
     arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
     arena_modelo.textureBala = arena_modelo.LoadTextureRAW("largada.bmp");
     arena_modelo.textureChao = arena_modelo.LoadTextureRAW("Blue_evein.bmp");
-    arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+    arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
     arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
 
     glutKeyboardFunc(keyPress);
