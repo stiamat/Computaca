@@ -326,7 +326,7 @@ void Arena::Desenha_Individuos(vector<Circle *> *lista_individuos)
             glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
             if(ind->get_corG() == 0){
                 // cout << ind->direcao << endl;
-                Desenha_Jogador(1, 0, 0, ind->get_z(), ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
+                Desenha_Jogador(1, 0, 0, ind->get_z(), ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao, ind->direcaoZ, ind->thetaCanhaoZ);
             }
         glPopMatrix();
     }
@@ -394,14 +394,16 @@ void Arena::Desenha_Tiro()
     {
         float x = (this->arena_config.get_x() - this->tiros[i]->get_Inix());
         float y = (this->arena_config.get_y() - this->tiros[i]->get_Iniy());
+        float z = this->tiros[i]->get_z();
         //cout << x << " " << y << endl;
         float rot = this->tiros[i]->get_direcao();
+        // float rotZ = this->tiros[i];
         //cout << rot << " rotação" << endl;
         float canhao = this->tiros[i]->get_canhao();
         //cout << canhao << " canhao" << endl;
 
         glPushMatrix();
-            glTranslatef(x, y, -100);
+            glTranslatef(x, y, z);
             glRotatef(-rot, 0, 0, 1);
             
 
@@ -418,16 +420,19 @@ void Arena::Desenha_Tiro()
     }
 };
 
-void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao)
+void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao, float direcaoZ, float thetaCanhaoZ)
 {
     float rot;
 
     glPushMatrix();
         glTranslatef(x, y, z);
 
+        
         //========================================
-
+        
         glRotatef(-direcao, 0, 0, 1);
+
+        glRotatef(direcaoZ, 1, 0, 0);
 
         //========================================
 
@@ -468,6 +473,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(0, raio, 0);
             glRotatef(thetaCanhao, 0, 0, 1);
+            glRotatef(thetaCanhaoZ, 1, 0, 0);
             // Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -535,6 +541,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
                 Desenha_Triangulo(raio / 3.5, 0.8, 1, 0);
             glPopMatrix();
         glPopMatrix();
+
 
     glPopMatrix();
 };
@@ -644,7 +651,7 @@ void Arena::Desenha_Chao(){
 
 void Arena::Desenha_Parede(){
     glPushMatrix();
-            glTranslatef(0, 0, -16*20);//mudar
+            glTranslatef(0, 0, -16*jogador_config.get_raio());//mudar
             
             GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
             GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
@@ -696,7 +703,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 
         Desenha_Tiro();
 
-        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_z(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao);
+        Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_z(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao, jogador->direcaoZ, jogador->thetaCanhaoZ);
 
         Desenha_Individuos(lista_individuos);
         
@@ -757,13 +764,14 @@ void Arena::inicioDecolagem()
 };
 
 void Arena::colocaAviaoNosEixo(float x, float y, float direcao){
-
     jogador_config.set_x(x);
     jogador_config.set_y(y);
-    jogador_config.set_z(-5);
-    jogador_config.set_raio(20);
+    jogador_config.set_z(-jogador_config.get_raio()/2);
+    float aux = this->raioOriginalJogador * 2.0;
+    jogador_config.set_raio(aux);
     this->direcao = direcao;
 }
+
 
 void Arena::decolando()
 {
@@ -775,9 +783,12 @@ void Arena::decolando()
         float m = ((2.0 * (this->deltaS / 2)) - distanciaJogadorFimPista()) / (this->deltaS / 2.0);
         // float novoRaio = this->raioOriginalJogador * m;
         // this->jogador_config.set_raio(novoRaio);
-        float z1 = m * 50;
-        this->jogador_config.set_z(-z1); 
+        float z1 = pow(m/2,2);
+        this->jogador_config.set_z( (this->jogador_config.get_z()) - z1);
+        this->jogador_config.direcaoZ = -10 * (m-1); 
+        
         printf("%f\n",this->jogador_config.get_z());
+
     }
     else
     {
@@ -847,6 +858,9 @@ void Arena::decolou(float deltaT){
         andaXjogador(-this->deslocX( deltaT));
         this->addEstadoDecolagem();
     }
+    
+    andaZjogador(this->jogador_config.direcaoZ);
+
     TrataForaDaArena(&jogador_config);
     
 };
@@ -858,7 +872,7 @@ int Arena::encostandoNumInimigo(){
         Circle *aux = this->individuos[i];
         if (aux->get_corR() == 1 && aux->get_corG() == 0 && aux->get_corB() == 0)
         {
-            float dist = sqrt(pow(aux->get_x() - this->jogador_config.get_x(), 2) + pow(aux->get_y() - this->jogador_config.get_y(), 2));
+            float dist = sqrt(pow(aux->get_x() - this->jogador_config.get_x(), 2) + pow(aux->get_y() - this->jogador_config.get_y(), 2) + pow(aux->get_z() - this->jogador_config.get_z(), 2));
             if (dist <= (aux->get_raio() + this->jogador_config.get_raio()))
             {
                 aux->colisao = 1;
@@ -878,6 +892,18 @@ void Arena::andaXjogador(float x){
     this->jogador_config.set_x(this->jogador_config.get_x() + x);
     
 };
+
+void Arena::andaZjogador(float z){
+    float incremento = 3*sin(this->jogador_config.direcaoZ * PI / 180.0);
+    this->jogador_config.set_z(this->jogador_config.get_z()+incremento);
+
+    if(this->jogador_config.get_z() >= -this->raioBase - this->jogador_config.get_raio() ){
+        this->jogador_config.set_z(-this->raioBase - this->jogador_config.get_raio());
+    }
+    if(this->jogador_config.get_z() <= -15* jogador_config.get_raio()){
+        this->jogador_config.set_z(-15* jogador_config.get_raio());
+    }
+}
 
 void Arena::andaYjogador(float y){
     this->jogador_config.set_y(this->jogador_config.get_y() + y);
@@ -944,6 +970,7 @@ void Arena::tiro(int tipo)
     nova->set_raio(jogador_config.get_raio());
     nova->set_direcao(this->direcao);
     nova->set_canhao(this->thetaCanhao);
+    nova->set_canhaoZ(this->jogador_config.thetaCanhaoZ);
     nova->set_velocidade(this->velocidadeJogadorAtual * this->velocidadeJogadorBase);
     nova->set_velocidadeAviao(this->velocidadeJogadorAtual);
     nova->set_velocidadeBase(this->velocidadeTiroBase);
@@ -1007,26 +1034,26 @@ void Arena::limpaTiros(){
                 this->tiros.erase(this->tiros.begin() + i);
             }
         }else{
-            if(!(this->tiros[i]->get_time() < 2)){
                 
-                for (int j = 0; j < this->individuos.size(); j++)
+            for (int j = 0; j < this->individuos.size(); j++)
+            {
+                Circle *aux = this->individuos[j];
+                if (aux->get_corG() != 0)
                 {
-                    Circle *aux = this->individuos[j];
-                    if (aux->get_corG() != 0)
+                    float dist = sqrt(pow(aux->get_x() - this->tiros[i]->get_Inix(), 2) + pow(aux->get_y() - this->tiros[i]->get_Iniy(), 2)+ pow(aux->get_z() - this->tiros[i]->get_z(), 2));
+                    
+                    if (dist <= (aux->get_raio() + (this->tiros[i]->get_raio()*0.3)))
                     {
-                        float dist = sqrt(pow(aux->get_x() - this->tiros[i]->get_Inix(), 2) + pow(aux->get_y() - this->tiros[i]->get_Iniy(), 2));
-                        
-                        if (dist <= (aux->get_raio() + (this->tiros[i]->get_raio()*0.3)))
-                        {
-                            aux->colisao = 1;
-                            this->individuos.erase(this->individuos.begin() + j);
-                            break;
-                        }
+                        aux->colisao = 1;
+                        this->individuos.erase(this->individuos.begin() + j);
+                        break;
                     }
                 }
-            
-                this->tiros.erase(this->tiros.begin() + i);
+
+        
             }
+
+            if(this->tiros[i]->get_z() >= 0) this->tiros.erase(this->tiros.begin() + i);
         }
         
     }
@@ -1050,7 +1077,7 @@ void Arena::atualizaTiros(float p){
                 Circle *aux = this->individuos[j];
                 if (aux->get_corG() == 0)
                 {
-                    float dist = sqrt(pow(aux->get_x() - (tiro->get_Inix() + tiro->get_x()), 2) + pow(aux->get_y() - (tiro->get_Iniy() + tiro->get_y()), 2));
+                    float dist = sqrt(pow(aux->get_x() - (tiro->get_Inix() + tiro->get_x()), 2) + pow(aux->get_y() - (tiro->get_Iniy() + tiro->get_y()), 2) + pow(aux->get_z() - (tiro->get_z()), 2));
                     
                     // cout << tiro->get_raio()/15 << endl;
                     if (dist <= (aux->get_raio() + (tiro->get_raio()/15)))
@@ -1067,7 +1094,7 @@ void Arena::atualizaTiros(float p){
 
         if(tiro->balaIni == 1){
 
-            float dist = sqrt(pow(this->jogador_config.get_x() - (tiro->get_Inix() + tiro->get_x()), 2) + pow(this->jogador_config.get_y() - (tiro->get_Iniy() + tiro->get_y()), 2));
+            float dist = sqrt(pow(this->jogador_config.get_x() - (tiro->get_Inix() + tiro->get_x()), 2) + pow(this->jogador_config.get_y() - (tiro->get_Iniy() + tiro->get_y()), 2)+ pow(this->jogador_config.get_z() - (tiro->get_z()), 2));
             
             if (dist <= (this->jogador_config.get_raio() + (tiro->get_raio()/15)))
             {
@@ -1184,11 +1211,26 @@ void Arena::atualizaInimigos(float p){
                 }
 
                 if(estado == 3){
-                    //deslocamento vertical subir 
+                    ind->direcaoZ -= 0.9;
+                    if(ind->direcaoZ <= -10){
+                        ind->direcaoZ = -10;
+                    }
                 }
                 
                 if(estado == 4){
-                    //deslocamento vertical descer
+                    ind->direcaoZ += 0.9;
+                    if(ind->direcaoZ >= 10){
+                        ind->direcaoZ = 10;
+                    }
+                }
+
+                if(estado != 3 || estado != 4){
+                    if(ind->direcaoZ >= 0){
+                        ind->direcaoZ -= 0.5;
+                    }
+                    if(ind->direcaoZ <= 0){
+                        ind->direcaoZ += 0.5;
+                    }
                 }
             }
 
@@ -1199,6 +1241,16 @@ void Arena::atualizaInimigos(float p){
             
             desl = (((this->velocidadeJogadorAtual  * sqrt(2) * -multiplicadorDeslocamentoX(ind->direcao)) * ind->inimigo_vel) * p) / 2;
             ind->andaYCircle(desl);
+
+            float incremento = 3*sin(ind->direcaoZ * PI / 180.0);
+            ind->set_z(ind->get_z()+incremento);
+            if(ind->get_z() >= (-this->raioBase - ind->get_raio())){
+                ind->set_z(-this->raioBase - ind->get_raio());
+            }
+
+            if(ind->get_z() <= -15* jogador_config.get_raio()){
+                ind->set_z(-15* jogador_config.get_raio());
+            }
             
             ind->thetaHelice += ((70 + ind->inimigo_vel) * 60 / 360.0) + ((120) * 60 / 360.0);
 

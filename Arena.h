@@ -33,6 +33,7 @@ class Arena
     
     float direcao = 0;
     float thetaCanhao = 0;
+    float thetaCanhaoZ = 0;
     float thetaHelice = 0;
 
     float raioOriginalJogador = 0;
@@ -72,7 +73,7 @@ private:
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
     void Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
-    void Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao);
+    void Desenha_Jogador(int ini, float x, float y, float z, float raio, float thetaCanhao, float thetaHelice, float direcao, float direcaoZ, float thetaCanhaoZ);
     void Desenha_Circulo(float raio, float r, float g, float b);
     void Desenha_Retangulo(float height, float width, float r, float g, float b);
     void Desenha_Triangulo(float tam, float r, float g, float b);
@@ -94,6 +95,7 @@ public:
     float inimigo_freqTiro;
     float inimigo_vel;
     float inimigo_vel_tiro;
+    float raioBase;
     //Arena
     Arena();
 
@@ -159,6 +161,7 @@ public:
 
         float auxX = pista_decolagem.get_x2() - jogador_config.get_x(), auxY = pista_decolagem.get_y2() - jogador_config.get_y();
         this->direcao = anguloJogador(auxX, auxY);
+        this->jogador_config.direcao = anguloJogador(auxX, auxY);
 
         this->tiros.erase(this->tiros.begin(), this->tiros.end());
         this->individuos.erase(this->individuos.begin(), this->individuos.end());
@@ -199,6 +202,7 @@ public:
     void decolou(float deltaT);
     void andaXjogador(float x);
     void andaYjogador(float x);
+    void andaZjogador(float z);
     float deslocX(float deltaT);
     float deslocY(float deltaT);
     float anguloJogador(float x, float y);
@@ -208,6 +212,18 @@ public:
     {
         this->direcao += a * velocidadeJogadorBase;
         jogador_config.direcao = this->direcao;
+    };
+    void aviaoZ(float angulo){
+        this->jogador_config.direcaoZ += angulo * velocidadeJogadorBase;
+        float ind = 10;
+        if(this->jogador_config.direcaoZ >= ind){
+            this->jogador_config.direcaoZ = ind;
+        }
+
+        if(this->jogador_config.direcaoZ <= -ind){
+            this->jogador_config.direcaoZ = -ind;
+        }
+
     };
 
     void machaVelocidade(float a)
@@ -240,16 +256,31 @@ public:
     void miraCanhao(float x)
     {
         this->thetaCanhao += x;
+        
 
-        if (this->thetaCanhao < -45.0)
+        if (this->thetaCanhao < -30.0)
         {
-            this->thetaCanhao = -45.0;
+            this->thetaCanhao = -30.0;
         }
-        if (this->thetaCanhao > 45.0)
+        if (this->thetaCanhao > 30.0)
         {
-            this->thetaCanhao = 45.0;
+            this->thetaCanhao = 30.0;
         }
+        this->jogador_config.thetaCanhao += x;
     };
+
+    void miraCanhaoZ(float z){
+        this->jogador_config.thetaCanhaoZ += z;
+
+        if (this->jogador_config.thetaCanhaoZ < -30.0)
+        {
+            this->jogador_config.thetaCanhaoZ = -30.0;
+        }
+        if (this->jogador_config.thetaCanhaoZ > 30.0)
+        {
+            this->jogador_config.thetaCanhaoZ = 30.0;
+        }
+    }
 
     void tiro(int tipo);
     void tiroInimigo(Circle* ind);

@@ -18,7 +18,9 @@ class Circle{
 
 public:
     float direcao = 0;
+    float direcaoZ = 0;
     float thetaCanhao = 0;
+    float thetaCanhaoZ = 0;
     float thetaHelice = 0;
     float inimigo_freqTiro = 0;
     float inimigo_vel = 0;

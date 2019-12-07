@@ -103,6 +103,16 @@ void Bala::set_direcao(float p)
     this->direcao = p;
 };
 
+float Bala::get_direcaoZ()
+{
+    return this->direcaoZ;
+};
+
+void Bala::set_direcaoZ(float p)
+{
+    this->direcaoZ = p;
+};
+
 float Bala::get_canhao()
 {
     return this->canhao;
@@ -111,6 +121,16 @@ float Bala::get_canhao()
 void Bala::set_canhao(float p)
 {
     this->canhao = p;
+};
+
+float Bala::get_canhaoZ()
+{
+    return this->canhaoZ;
+};
+
+void Bala::set_canhaoZ(float p)
+{
+    this->canhaoZ = p;
 };
 
 float Bala::get_velocidade()
@@ -193,6 +213,7 @@ void Bala::Atualiza(float p)
     float desl;
     float multX;
     float multY;
+    float multZ;
     float newdesl;
     if (this->tipo == 1)
     {
@@ -201,6 +222,7 @@ void Bala::Atualiza(float p)
         //cout << "X: " << multX << endl;
         multY = sin((this->direcao - this->canhao) * PI / 180.0) * (this->multVelocidade+1);
         //cout << "Y: " << multY << endl;
+        multZ = sin((this->direcaoZ - this->canhaoZ) * PI / 180.0) * (this->multVelocidade+1);
         newdesl = 0;
 
         // cout << this->solido.get_raio() << endl;
@@ -227,30 +249,40 @@ void Bala::Atualiza(float p)
         andaXtiro(newdesl);
         // cout << "x:"<< get_velocidade() << endl;
 
+        if(this->multVelocidade+1 > 1.3){
+            newdesl = (((get_velocidade()) * sqrt(2) * get_velocidadeBase() * -multZ * p)/ 2);       
+
+        }else{
+            newdesl = (((get_velocidade() + 30) * sqrt(2) * get_velocidadeBase() * -multZ * p)/ 2);       
+
+        }
+        // newdesl = (((get_velocidade() + 50) * sqrt(2) * get_velocidadeBase() * -multY * p)/ 2);
+        andaZtiro(newdesl);
+        // cout << "x:"<< get_velocidade() << endl;
+
     }
     else
     {
         this->time += p;
-        if(this->time < 4.0){
+        // desl = (get_velocidade() * p/ 2.0);//lembrar de pegar o vel do tiro
+        // cout << get_velocidade() << endl;
+        multX = cos((this->direcao) * PI / 180.0) * this->multVelocidade;
+        //cout << "X: " << multX << endl;
+        multY = sin((this->direcao) * PI / 180.0) * this->multVelocidade;
+        //cout << "Y: " << multY << endl;
+        newdesl = 0;
 
-            // desl = (get_velocidade() * p/ 2.0);//lembrar de pegar o vel do tiro
-            // cout << get_velocidade() << endl;
-            multX = cos((this->direcao) * PI / 180.0) * this->multVelocidade;
-            //cout << "X: " << multX << endl;
-            multY = sin((this->direcao) * PI / 180.0) * this->multVelocidade;
-            //cout << "Y: " << multY << endl;
-            newdesl = 0;
+        float m = (1.0*((4.0-this->time)/4) + 1.0)/2.0;
+        this->solido.set_raio(this->raioOriginal*m);
+        // cout << this->solido.get_raio() << endl;
+        newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multX * p)/ 2);
+        andaYtiro(newdesl);
 
-            float m = (1.0*((4.0-this->time)/4) + 1.0)/2.0;
-            this->solido.set_raio(this->raioOriginal*m);
-            // cout << this->solido.get_raio() << endl;
-            newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multX * p)/ 2);
-            andaYtiro(newdesl);
+        newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multY * p)/ 2);
+        andaXtiro(newdesl);
 
-            newdesl = ((get_velocidade() * 1.3*sqrt(2) * -multY * p)/ 2);
-            andaXtiro(newdesl);
-        }
-        
+        newdesl = 10*this->time*this->time/2.0;
+        andaZtiro(newdesl);
     }
     
 };
@@ -270,4 +302,9 @@ void Bala::andaXtiro(float x)
 void Bala::andaYtiro(float y)
 {
     this->set_Iniy(this->get_Iniy() + y);
+};
+
+void Bala::andaZtiro(float z)
+{
+    this->set_z(this->get_z() + z);
 };

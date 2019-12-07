@@ -6,8 +6,10 @@
 class Bala
 {
     float direcao = 0;
+    float direcaoZ = 0;
     float time = 0;
     float canhao = 0;
+    float canhaoZ = 0;
     float velocidadeBase = 0;
     float velocidade = 0;
     float velocidadeAviao = 0;
@@ -37,8 +39,14 @@ public:
     float get_direcao();
     void set_direcao(float p);
 
+    float get_direcaoZ();
+    void set_direcaoZ(float p);
+
     float get_canhao();
     void set_canhao(float p);
+
+    float get_canhaoZ();
+    void set_canhaoZ(float p);
 
     float get_velocidade();
     void set_velocidade(float p);
@@ -74,5 +82,6 @@ public:
 
     void andaXtiro(float x);
     void andaYtiro(float y);
+    void andaZtiro(float z);
 };
 #endif
