@@ -481,6 +481,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
 
             glTranslatef(0, raio, 0);
             glTranslatef(0, -raio/(raio*2), 0);
+            
             glRotatef(thetaCanhao, 0, 0, 1);
             glRotatef(thetaCanhaoZ, 1, 0, 0);
             // Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
