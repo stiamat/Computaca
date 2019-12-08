@@ -15,6 +15,7 @@
 
 #define PI 3.1415
 
+float ilusao = 100.0;
 
 using namespace std;
 
@@ -444,6 +445,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(-15.0, 0, 0, 1);
+            glScalef(1,0.4,0.1);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -451,6 +453,8 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(raio / 2 + raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
+
+            glScalef(0.1,0.7,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
@@ -459,6 +463,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(-raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(15.0, 0, 0, 1);
+            glScalef(1,0.4,0.1);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -466,16 +471,26 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(-raio / 2 - raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
+            glScalef(0.1,0.7,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
         //canhão
         glPushMatrix();
+            
+
             glTranslatef(0, raio, 0);
+            glTranslatef(0, -raio/(raio*2), 0);
             glRotatef(thetaCanhao, 0, 0, 1);
             glRotatef(thetaCanhaoZ, 1, 0, 0);
             // Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
-            Desenha_Cubo(raio, this->textureAviao);
+            // Desenha_Cubo(raio, this->textureAviao);
+            
+            // glRotatef(-45, 1, 0, 0);
+            glRotatef(-90, 0, 0, 1);
+            glRotatef(-90, 0, 1, 0);
+            glScalef(0.1,0.1,0.3);
+            DesenhaCilindro(this->textureAviao);
         glPopMatrix();
 
         //desenha elipse
@@ -493,7 +508,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(0, -raio, 0);
             // Desenha_Retangulo(raio / 2, raio / 10, 0, 0, 0);
-            Desenha_Cubo(raio, this->textureAviao);
+            // Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
         //desenha cabine
@@ -601,15 +616,21 @@ void Arena::Desenha_Cubo(int raio, GLuint text){
     
     // glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-        GLUquadric* base =  gluNewQuadric();
-        gluQuadricNormals(base, GLU_SMOOTH);
-        gluQuadricOrientation(base, GLU_OUTSIDE);
-        gluQuadricTexture(base, GL_TRUE);
+        // GLUquadric* base =  gluNewQuadric();
+        // gluQuadricNormals(base, GLU_SMOOTH);
+        // gluQuadricOrientation(base, GLU_OUTSIDE);
+        // gluQuadricTexture(base, GL_TRUE);
         
+        glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
+        glEnable(GL_TEXTURE_GEN_T);
         glBindTexture (GL_TEXTURE_2D, text);
-        glScalef(0.1,0.3,0.1);
-        gluSphere(base,20,20,20);
-        gluDeleteQuadric(base);
+        // glScalef(0.1,0.3,0.1);
+        glutSolidCube(20.0);
+
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
+        // gluSphere(base,20,20,20);
+        // gluDeleteQuadric(base);
     glPopMatrix();
     // glDisable(GL_TEXTURE_2D);
 };
@@ -641,12 +662,79 @@ void Arena::Desenha_Chao(){
             // GLuint textureChao = LoadTextureRAW("earth.bmp");
             glBindTexture (GL_TEXTURE_2D, textureChao);
 
-            gluDisk(chao,0,this->arena_config.get_raio(),50,50);
+            gluDisk(chao,0,this->arena_config.get_raio()+ilusao,50,50);
             gluDeleteQuadric(chao);
 
         // glDisable(GL_TEXTURE_2D);
         
     glPopMatrix();
+}
+
+void Arena::Desenha_Ceu(){
+
+    glPushMatrix();
+        glTranslatef(0, 0, -16*jogador_config.get_raio());
+
+        GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+        GLfloat materialColorA[] = { 0.5, 0.5, 0.5, 1};
+        GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+        GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+        GLfloat mat_shininess[] = { 50.0 };
+        glColor3f(0,0.5,0.5); //meu
+    
+        glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+        
+
+        // glEnable(GL_TEXTURE_2D);
+            GLUquadricObj *chao = gluNewQuadric();
+            gluQuadricNormals(chao, GLU_SMOOTH);
+            gluQuadricOrientation(chao,  GLU_INSIDE);
+            gluQuadricTexture(chao, GL_TRUE);
+
+            // GLuint textureChao = LoadTextureRAW("earth.bmp");
+            glBindTexture (GL_TEXTURE_2D, textureCeu);
+
+            gluDisk(chao,0,this->arena_config.get_raio()+ilusao,50,50);
+            gluDeleteQuadric(chao);
+
+        // glDisable(GL_TEXTURE_2D);
+        
+    glPopMatrix();
+}
+
+void Arena::DesenhaCilindro(GLuint text){
+    glPushMatrix();
+            GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+            GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+            GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_shininess[] = { 100.0 };
+            glColor3f(0,0.5,0.5); //meu
+        
+            glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+            glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+            glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+            
+            
+            // glEnable(GL_TEXTURE_2D);
+                GLUquadricObj *cilindro = gluNewQuadric();
+                gluQuadricNormals(cilindro, GLU_SMOOTH);
+                gluQuadricOrientation(cilindro, GLU_OUTSIDE);
+                gluQuadricTexture(cilindro, GL_TRUE);
+
+                // GLuint textureParedes = LoadTextureRAW("stars1.bmp");
+                glBindTexture (GL_TEXTURE_2D, text);
+
+                gluCylinder(cilindro,10,10,10,30,30);//mudar meu
+                gluDeleteQuadric(cilindro);
+            // glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
 }
 
 void Arena::Desenha_Parede(){
@@ -676,7 +764,7 @@ void Arena::Desenha_Parede(){
                 // GLuint textureParedes = LoadTextureRAW("stars1.bmp");
                 glBindTexture (GL_TEXTURE_2D, this->textureParedes);
 
-                gluCylinder(cilindro,this->arena_config.get_raio(),this->arena_config.get_raio(),16*20,50,50);//mudar meu
+                gluCylinder(cilindro,this->arena_config.get_raio()+ilusao,this->arena_config.get_raio()+ilusao,16*20,50,50);//mudar meu
                 gluDeleteQuadric(cilindro);
             // glDisable(GL_TEXTURE_2D);
         glPopMatrix();
@@ -697,6 +785,8 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 
         Desenha_Parede();
 
+        Desenha_Ceu();
+
         DesenhaBaseInimiga(lista_individuos);
 
         Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
@@ -706,38 +796,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
         Desenha_Jogador(0,arena->get_x() - jogador->get_x(), arena->get_y() - jogador->get_y(), jogador->get_z(), jogador->get_raio(), this->thetaCanhao, this->thetaHelice, this->direcao, jogador->direcaoZ, jogador->thetaCanhaoZ);
 
         Desenha_Individuos(lista_individuos);
-        
-        
-
-        // glPushMatrix();
-        //     glTranslatef(0, 0, -16*20);//mudar
-            
-        //     GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
-        //     GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
-        //     GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
-        //     GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
-        //     GLfloat mat_shininess[] = { 100.0 };
-        //     glColor3f(0,0.5,0.5); //meu
-        
-        //     glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
-        //     glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
-        //     glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
-        //     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-        //     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-            
-
-        //     glEnable(GL_TEXTURE_2D);
-        //         gluQuadricNormals(ceu, GLU_SMOOTH);
-        //         gluQuadricOrientation(ceu, GLU_OUTSIDE);
-        //         gluQuadricTexture(ceu, GL_TRUE);
-                
-        //         glBindTexture (GL_TEXTURE_2D, textureCeu);
-        //         gluDisk(ceu,0,arena->get_raio(),50,50);
-        //     glDisable(GL_TEXTURE_2D);
-            
-        // glPopMatrix();
-
-        
+           
 
     glPopMatrix();
    
@@ -787,7 +846,7 @@ void Arena::decolando()
         this->jogador_config.set_z( (this->jogador_config.get_z()) - z1);
         this->jogador_config.direcaoZ = -10 * (m-1); 
         
-        printf("%f\n",this->jogador_config.get_z());
+        // printf("%f\n",this->jogador_config.get_z());
 
     }
     else

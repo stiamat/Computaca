@@ -68,6 +68,8 @@ private:
     
     void Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista);
     void Desenha_Chao();
+    void Desenha_Ceu();
+    void DesenhaCilindro(GLuint text);
     void Desenha_Esfera(int raio, GLuint text);
     void Desenha_Cubo(int raio, GLuint text);
     void Desenha_Individuos(vector<Circle *> *lista_individuos);

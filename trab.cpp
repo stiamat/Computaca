@@ -19,14 +19,25 @@ int mouseAt = 0;
 int basesIni = 0;
 int basesIniAgr = 0;
 int eixo = 0;
-char textImprimir[1000];
+char textImprimir[100];
+const char digits[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+double camXYAngle=0;
+double camXZAngle=0;
+int buttonDown = 0;
 
 
 
 // --------------------------------
 
+void limpaTexto(){
+    int i = 0; 
+    while(i < 100){
+        textImprimir[i++] = '\0';
+    }
+}
 
-void RasterChars(float x, float y, float z, const char * text, double r, double g, double b)
+void RasterChars(float x, float y, float z, char * text, double r, double g, double b)
 {
     //Push to recover original attributes
     glPushAttrib(GL_ENABLE_BIT);
@@ -37,14 +48,14 @@ void RasterChars(float x, float y, float z, const char * text, double r, double 
         glRasterPos3f(x, y, z);
         const char* tmpStr;
         tmpStr = text;
-        while( *tmpStr ){
-            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *tmpStr);
-            tmpStr++;
+        while( *text ){
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *text++);
+            // tmpStr++;
         }
     glPopAttrib();
 }
 
-void PrintText(float x, float y, const char * text, double r, double g, double b)
+void PrintText(float x, float y,char * text, double r, double g, double b)
 {
     //Draw text considering a 2D space (disable all 3d features)
     glMatrixMode (GL_PROJECTION);
@@ -54,7 +65,7 @@ void PrintText(float x, float y, const char * text, double r, double g, double b
         glOrtho(arena_modelo.ortho_Config(1, 1), arena_modelo.ortho_Config(1, -1), arena_modelo.ortho_Config(2, -1), arena_modelo.ortho_Config(2, 1), -1.0, 1.0);
         RasterChars(x, y, 0, text, r, g, b);    
     glPopMatrix();
-    // glMatrixMode (GL_MODELVIEW);
+    glMatrixMode (GL_MODELVIEW);
 }
 
 // Desenha um texto na janela GLUT
@@ -170,9 +181,14 @@ void ChangeCoordSys(GLdouble ax, GLdouble ay, GLdouble az, GLdouble bx, GLdouble
 }
 
 
+
+char inttochar(int val, int base){
+    return digits[val % base];
+}
+
 //
 int zCam = -300, yCam = 500, xCam = 500;
-int camA = 0;
+int camera = 0;
 int angCam = 0;
 
 void display(void){
@@ -181,47 +197,62 @@ void display(void){
     Circle jogadorT = arena_modelo.get_jogador();
     glMatrixMode(GL_PROJECTION);
 
+
+        float x2 = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
+        float y2 = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
+
+        float lookX = jogadorT.get_x() - 500 - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
+        float lookY = jogadorT.get_y() - 500 - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
         glLoadIdentity();
-        if(camA == 0){
+        if(camera == 3){
             gluPerspective(90, 1, 3, 1000);
-            gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
+            // glTranslatef(jogadorT.get_x(),jogadorT.get_y(),0);
+            // glRotatef(180,0,0,0);
+            // gluLookAt(xCam, yCam, zCam, 500, 500, 1, 0, 1, 0);
+            // gluLookAt(500-lookX, 500-lookY, jogadorT.get_z()-10, 500-x2, 500-y2, jogadorT.get_z(), 0, 0, -1);
+            glRotatef(180,1,0,0);
+            glRotatef(180,0,0,1);
+            
+            glRotatef(jogadorT.direcao,0,0,1);
+            glTranslatef(-500+(jogadorT.get_x() - 500),-500+(jogadorT.get_y() - 500),-jogadorT.get_z()+30);
+            glRotatef(camXZAngle,1,0,0);
+            glRotatef(camXYAngle,0,1,0);
+            // glRotatef(180,0,1,0);         
+        }
 
-          
-        }else{
+        if(camera == 1){
             gluPerspective(90, 1, 1, 700);
-            float x2 = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
-            float y2 = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
-
-            float lookX = jogadorT.get_x() - 500 - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
-            float lookY = jogadorT.get_y() - 500 - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
-            
-            
             gluLookAt(500 - x2, 500 - y2, (jogadorT.get_z()-10), (500 - lookX), (500 - lookY), (jogadorT.get_z()-10), 0, 0, -1);    
             
         }
 
+        if(camera == 2){
+
+        }
+
     glMatrixMode(GL_MODELVIEW);
     
-    // GLfloat light_position[] = { 500.0, 500.0, -16*jogadorT.get_raio(), 1 };
-    // glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    GLfloat light_position[] = { 500.0, 500.0, -16*jogadorT.get_raio(), 1 };
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     
-    GLfloat farol_position[] = { jogadorT.get_x() - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_y() - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_z(), 1 };
-    GLfloat farol_direction[] = {jogadorT.get_x() - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao), jogadorT.get_y() - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao), -(jogadorT.get_z() + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcaoZ))};
-    GLfloat white[4] = { 1, 1, 1, 0 };
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 1);
-    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, farol_direction);
-    glLightfv(GL_LIGHT1, GL_POSITION, farol_position);
-    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 32);
-    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.2);
-    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
-    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
+    // GLfloat farol_position[] = { jogadorT.get_x() - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_y() - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_z(), 1 };
+    // GLfloat farol_direction[] = {jogadorT.get_x() - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao), jogadorT.get_y() - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao), -(jogadorT.get_z() + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcaoZ))};
+    // GLfloat white[4] = { 1, 1, 1, 0 };
+    // glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 1);
+    // glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, farol_direction);
+    // glLightfv(GL_LIGHT1, GL_POSITION, farol_position);
+    // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 32);
+    // glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.2);
+    // glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
+    // glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
+    // glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
+    // glLightfv(GL_LIGHT1, GL_SPECULAR, white);
 
     arena_modelo.Desenha();
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
-        PrintText(700, 500, "Game Over!!! Aperte 'r' para recomecar!", 1,0,0);
+        char perdeu[] = "Game Over!!! Aperte 'r' para recomecar!";
+        PrintText(700, 500, perdeu , 1,0,0);
         // strcpy(textImprimir, "Game Over!!! Aperte 'r' para recomecar!");
         // glPushMatrix();
             
@@ -230,7 +261,8 @@ void display(void){
     }
 
     if(basesIniAgr == 0){
-        PrintText(750, 500, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!", 0,1,0);
+        char ganhou[] = "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!";
+        PrintText(750, 500, ganhou, 0,1,0);
         // strcpy(textImprimir, "Parabens!!! Voce Venceu. Aperte 'r' para recomecar!");
         // glPushMatrix();
             
@@ -238,17 +270,24 @@ void display(void){
         // glPopMatrix();
     }
     
-
+    // glMatrixMode(GL_PROJECTION);
+    limpaTexto();
     strcpy(textImprimir, "Bases Inimigas: ");
-    const char c = (basesIni-basesIniAgr) + '0';
-    strcat(textImprimir, &c);
+    char c = (basesIni-basesIniAgr) + '0';
+    textImprimir[strlen(textImprimir)] = c ;
+    
     PrintText(500-50, 500+280, textImprimir, 1,1,1);
 
+    limpaTexto();
     strcpy(textImprimir, "Restam ");
-    const char cc = basesIniAgr + '0';
-    strcat(textImprimir, &cc);
-    strcat(textImprimir, " bases inimigas");
+    char cc = basesIniAgr + '0';
+    textImprimir[strlen(textImprimir)] = cc ;
+    textImprimir[strlen(textImprimir)+1] = '\0';
+    const char aux[] = " bases inimigas";
+    strcat(textImprimir, aux);
+    // strcat(textImprimir, &a);
     PrintText(500-50, 500+260, textImprimir, 1,1,1);
+    // glMatrixMode(GL_MODELVIEW);
     
     
     //glFlush();
@@ -279,6 +318,9 @@ void init(){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
+
+int lastX = 0;
+int lastY = 0;
 
 void motion(int x, int y){
     if (deltaXold == 0)
@@ -312,6 +354,20 @@ void motion(int x, int y){
         arena_modelo.miraCanhaoZ(-1);
         deltaYold = y;
     }
+
+    if (!buttonDown)
+        return;
+    
+    camXYAngle += x - lastX;
+    camXZAngle += y - lastY;
+    
+    camXYAngle = (int)camXYAngle % 360;
+    camXZAngle = (int)camXZAngle % 360;
+    
+    lastX = x;
+    lastY = y;
+    printf("oi\n");
+    glutPostRedisplay();
 }
 
 void mouse(int button, int state, int x, int y){
@@ -350,57 +406,29 @@ void mouse(int button, int state, int x, int y){
             }
         }
     }
+
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        lastX = x;
+        lastY = y;
+        buttonDown = 1;
+    } 
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+        buttonDown = 0;
+    }
+    glutPostRedisplay();
 }
 
 void keyPress(unsigned char key, int x, int y){
     switch (key)
     {
-    case '0':
-        letras['0'] = 1;
-        camA = 0;
+    case '3':
+        letras['3'] = 1;
         break;
     case '1':
         letras['1'] = 1;
-        camA = 1;
-        break;
-    case '8':
-        letras['8'] = 1;
-        yCam += 5;
         break;
     case '2':
         letras['2'] = 1;
-        yCam -= 5;
-        break;
-    case '4':
-        letras['4'] = 1;
-        xCam -= 5;
-        break;
-    case '6':
-        letras['6'] = 1;
-        xCam += 5;
-        break;
-    case '5':
-        letras['5'] = 1;
-        zCam -= 5;
-        break;
-    case '9':
-        letras['9'] = 1;
-        zCam += 5;
-        break;
-    case '7':
-        letras['7'] = 1;
-        zCam = -300;
-        xCam = 500;
-        yCam = 500;
-        angCam = 0;
-        break;
-    case 'o':
-        letras['o'] = 1;
-        angCam += 5;
-        break;
-    case 'p':
-        letras['p'] = 1;
-        angCam -= 5;
         break;
     case 'a':
         letras['a'] = 1;
@@ -434,6 +462,9 @@ void keyPress(unsigned char key, int x, int y){
 void keyup(unsigned char key, int x, int y){
     switch (key)
     {
+    case '3':
+        letras['3'] = 0;
+        break;
     case '1':
         letras['1'] = 0;
         break;
@@ -473,25 +504,41 @@ void idle(void){
     float timeNew = glutGet(GLUT_ELAPSED_TIME);
     float deltaT = (timeNew - timeOld) / 1000.0;
 
-
     if (deltaT > 0)
     {
         timeOld = timeNew;
     }else{
         return;
     }
+    
+    if(eixo == 0){
+        arena_modelo.colocaAviaoNosEixo(arena_reset.get_jogador().get_x(), arena_reset.get_jogador().get_y(), arena_reset.get_jogador().direcao);
+    }
 
-    if (letras['r'] == 1)
+// ---------- Tratando Casos --------------
+
+    if (letras['1'] == 1)
+    {
+        camera = 1;
+    }
+
+    if (letras['2'] == 1)
+    {
+        camera = 2;
+    }
+
+    if (letras['3'] == 1)
+    {
+        camera = 3;
+    }
+
+    if (letras['r'] == 1) // reset
     {
         eixo = 0;
         arena_modelo.reset(arena_reset);
     }
 
-    if(eixo == 0){
-        arena_modelo.colocaAviaoNosEixo(arena_reset.get_jogador().get_x(), arena_reset.get_jogador().get_y(), arena_reset.get_jogador().direcao);
-    }
-
-    if (letras['u'] == 1)
+    if (letras['u'] == 1) // decola
     {
         eixo = 1;
         arena_modelo.inicioDecolagem();
@@ -585,6 +632,8 @@ int main(int argc, char **argv){
     arena_modelo.textureChao = arena_modelo.LoadTextureRAW("grass.bmp");
     arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
     arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
+    arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("grass.bmp");
+
 
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyup);
