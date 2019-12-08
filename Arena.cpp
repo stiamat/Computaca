@@ -924,8 +924,8 @@ void Arena::Desenha_MiniMapa(){
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             
             glTranslatef(this->arena_config.get_x(), this->arena_config.get_y(), 0);
-            glScalef(0.35,0.35,1);
-            glTranslatef(-this->arena_config.get_x(),-this->arena_config.get_y(),0);
+            glScalef(0.25,0.25,1);
+            glTranslatef(-this->arena_config.get_x()-this->arena_config.get_x()/2,-this->arena_config.get_y()/2-this->arena_config.get_y(),0);
             Desenha_Circulo(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
             
 
