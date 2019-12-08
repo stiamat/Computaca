@@ -105,6 +105,8 @@ public:
     void inputProcessing(char *input);
     void add_individuos(int x, int y, int raio, float r, float g, float b, int id);
     void set_partida(int x1, int y1, int x2, int y2, float r, float g, float b, int id);
+    void Desenha_MiniMapa();
+    void Desenha_Jogador2D(int ini, float x, float y, float raio, float thetaCanhao, float thetaHelice, float direcao);
     Circle get_jogador()
     {
         return jogador_config;

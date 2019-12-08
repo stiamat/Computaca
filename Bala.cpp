@@ -19,6 +19,31 @@ Bala::Bala(){
 
 };
 
+void Bala::Desenha2D(){
+    if (this->tipo == 1){
+        GLfloat x, y;
+        glColor3f(0, 0, 0);
+        glBegin(GL_POLYGON);
+        for (int ii = 0; ii < 360; ii++){
+            x = this->solido.get_raio()/10 * cos(PI * ii / 180);
+            y = this->solido.get_raio()/10 * sin(PI * ii / 180);
+            glVertex3f(x, y, 0); // cria o vértice
+        }
+        glEnd();
+    }else{
+        GLfloat x, y;
+        glColor3f(0, 0, 0);
+
+        glBegin(GL_POLYGON);
+        for (int ii = 0; ii < 360; ii++)
+        {
+            x = (this->solido.get_raio() * 0.3) * cos(PI * ii / 180);
+            y = (this->solido.get_raio() * 0.3) * sin(PI * ii / 180);
+            glVertex3f(x, y, 0); // cria o vértice
+        }
+        glEnd();
+    }
+}
 void Bala::Desenha(GLint texte)
 {
     if (this->tipo == 1)
