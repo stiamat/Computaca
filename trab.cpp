@@ -266,14 +266,9 @@ void display(void){
     // glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
     // glLightfv(GL_LIGHT1, GL_SPECULAR, white);
 
-<<<<<<< HEAD
-    // arena_modelo.Desenha_MiniMapa();
-    arena_modelo.Desenha();
-=======
     
     arena_modelo.Desenha();
     if(minimapa == 1) arena_modelo.Desenha_MiniMapa();
->>>>>>> 0003ec4c5fae93553ee8b6b0c8cf8558b9c3b261
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
         char perdeu[] = "Game Over!!! Aperte 'r' para recomecar!";
