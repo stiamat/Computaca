@@ -198,8 +198,8 @@ void display(void){
     glMatrixMode(GL_PROJECTION);
 
 
-        float x2 = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
-        float y2 = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/2);
+        float x2 = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/3);
+        float y2 = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()/3);
 
         float lookX = jogadorT.get_x() - 500 - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
         float lookY = jogadorT.get_y() - 500 - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
@@ -225,8 +225,8 @@ void display(void){
         }
 
         if(camera == 1){
-            gluPerspective(90, 1, 1, 700);
-            gluLookAt(500 - x2, 500 - y2, (jogadorT.get_z()-10), (500 - lookX), (500 - lookY), (jogadorT.get_z()-10), 0, 0, -1);    
+            gluPerspective(90, 1, 1, 1000);
+            gluLookAt(500 - x2, 500 - y2, (jogadorT.get_z()-10) - 7.5*sin(jogadorT.direcaoZ * PI /180), (500 - lookX), (500 - lookY), (jogadorT.get_z()-10) + 7.5*sin(jogadorT.direcaoZ * PI /180), 0, 0, -1);    
             
         }
 
@@ -236,7 +236,7 @@ void display(void){
 
     glMatrixMode(GL_MODELVIEW);
     
-    GLfloat light_position[] = { 500.0, 500.0, -16*jogadorT.get_raio(), 1 };
+    GLfloat light_position[] = { 500.0, 500.0, -16*jogadorT.get_raio()+30, 1 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     
     // GLfloat farol_position[] = { jogadorT.get_x() - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_y() - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_z(), 1 };

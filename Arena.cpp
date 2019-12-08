@@ -15,7 +15,7 @@
 
 #define PI 3.1415
 
-float ilusao = 100.0;
+float ilusao = 300.0;
 
 using namespace std;
 
@@ -956,11 +956,11 @@ void Arena::andaZjogador(float z){
     float incremento = 3*sin(this->jogador_config.direcaoZ * PI / 180.0);
     this->jogador_config.set_z(this->jogador_config.get_z()+incremento);
 
-    if(this->jogador_config.get_z() >= -this->raioBase - this->jogador_config.get_raio() ){
+    if(this->jogador_config.get_z() >= -this->raioBase - 2*this->jogador_config.get_raio() ){
         this->jogador_config.set_z(-this->raioBase - this->jogador_config.get_raio());
     }
-    if(this->jogador_config.get_z() <= -15* jogador_config.get_raio()){
-        this->jogador_config.set_z(-15* jogador_config.get_raio());
+    if(this->jogador_config.get_z() <= -14* jogador_config.get_raio()){
+        this->jogador_config.set_z(-14* jogador_config.get_raio());
     }
 }
 
@@ -1303,12 +1303,12 @@ void Arena::atualizaInimigos(float p){
 
             float incremento = 3*sin(ind->direcaoZ * PI / 180.0);
             ind->set_z(ind->get_z()+incremento);
-            if(ind->get_z() >= (-this->raioBase - ind->get_raio())){
-                ind->set_z(-this->raioBase - ind->get_raio());
+            if(ind->get_z() >= (-this->raioBase - 2*ind->get_raio())){
+                ind->set_z(-this->raioBase - 2*ind->get_raio());
             }
 
-            if(ind->get_z() <= -15* jogador_config.get_raio()){
-                ind->set_z(-15* jogador_config.get_raio());
+            if(ind->get_z() <= -14* jogador_config.get_raio()){
+                ind->set_z(-14* jogador_config.get_raio());
             }
             
             ind->thetaHelice += ((70 + ind->inimigo_vel) * 60 / 360.0) + ((120) * 60 / 360.0);

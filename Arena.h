@@ -164,6 +164,7 @@ public:
         float auxX = pista_decolagem.get_x2() - jogador_config.get_x(), auxY = pista_decolagem.get_y2() - jogador_config.get_y();
         this->direcao = anguloJogador(auxX, auxY);
         this->jogador_config.direcao = anguloJogador(auxX, auxY);
+        this->jogador_config.direcaoZ = 0;
 
         this->tiros.erase(this->tiros.begin(), this->tiros.end());
         this->individuos.erase(this->individuos.begin(), this->individuos.end());
