@@ -25,6 +25,7 @@ const char digits[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 double camXYAngle=0;
 double camXZAngle=0;
 int buttonDown = 0;
+int minimapa = 0;
 
 
 
@@ -262,8 +263,9 @@ void display(void){
     // glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
     // glLightfv(GL_LIGHT1, GL_SPECULAR, white);
 
-    arena_modelo.Desenha_MiniMapa();
-    // arena_modelo.Desenha();
+    
+    arena_modelo.Desenha();
+    if(minimapa == 1) arena_modelo.Desenha_MiniMapa();
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
         char perdeu[] = "Game Over!!! Aperte 'r' para recomecar!";
@@ -488,6 +490,9 @@ void keyPress(unsigned char key, int x, int y){
     case '-':
         letras['-'] = 1;
         break;
+    case 'm':
+        letras['m'] = 1;
+        break;
     default:
         break;
     }
@@ -529,6 +534,9 @@ void keyup(unsigned char key, int x, int y){
     case '-':
         letras['-'] = 0;
         break;
+    case 'm':
+        letras['m'] = 0;
+        break;
     default:
         break;
     }
@@ -554,6 +562,16 @@ void idle(void){
     if (letras['1'] == 1)
     {
         camera = 1;
+    }
+
+    if(letras['m'] == 1){
+
+        if(minimapa == 0){
+            minimapa = 1;
+        }else{
+            minimapa = 0;
+        }
+        
     }
 
     if (letras['2'] == 1)

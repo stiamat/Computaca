@@ -22,7 +22,7 @@ Bala::Bala(){
 void Bala::Desenha2D(){
     if (this->tipo == 1){
         GLfloat x, y;
-        glColor3f(0, 0, 0);
+        glColor4f(0, 0, 0,0.5);
         glBegin(GL_POLYGON);
         for (int ii = 0; ii < 360; ii++){
             x = this->solido.get_raio()/10 * cos(PI * ii / 180);
@@ -32,7 +32,7 @@ void Bala::Desenha2D(){
         glEnd();
     }else{
         GLfloat x, y;
-        glColor3f(0, 0, 0);
+        glColor4f(0, 0, 0,0.5);
 
         glBegin(GL_POLYGON);
         for (int ii = 0; ii < 360; ii++)
