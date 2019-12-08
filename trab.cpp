@@ -207,10 +207,14 @@ void display(void){
         
         float xC = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * jogadorT.get_raio();
         float yC = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * jogadorT.get_raio();
-
-        float anguloLook = -jogadorT.thetaCanhao - jogadorT.direcao;
-        float lookXC = jogadorT.get_x() - 500 - jogadorT.get_raio()/4*(cos(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
-        float lookYC = jogadorT.get_y() - 500 - jogadorT.get_raio()/4*(sin(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        
+        float anguloLook;
+       /* if(jogadorT.thetaCanhao < 0) anguloLook = -(30 + abs(jogadorT.thetaCanhao)) - jogadorT.direcao;
+        else*/ anguloLook = -jogadorT.thetaCanhao - jogadorT.direcao;
+        float anguloLookZ = -jogadorT.thetaCanhaoZ - jogadorT.direcaoZ;
+        float lookXC = jogadorT.get_x() - 500 - jogadorT.get_raio()/4*(sin(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        float lookYC = jogadorT.get_y() - 500 - jogadorT.get_raio()/4*(cos(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        float lookZC = jogadorT.get_z() - jogadorT.get_raio()/4*(sin(anguloLookZ* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
         // float lookXC = jogadorT.get_x() - 500 - (jogadorT.get_raio()/4)*sin(-jogadorT.thetaCanhao * PI /180) - (jogadorT.get_raio()/4)*sin(-jogadorT.direcao * PI /180) ;
         // float lookYC = jogadorT.get_y() - 500 - (jogadorT.get_raio()/4)*cos(-jogadorT.thetaCanhao * PI /180) - (jogadorT.get_raio()/4)*cos(-jogadorT.direcao * PI /180);
         glLoadIdentity();
@@ -242,7 +246,8 @@ void display(void){
 
         if(camera == 2){
             gluPerspective(90, 1, 1, 1000);
-            gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC), (jogadorT.get_z()-2) + sin(jogadorT.direcaoZ * PI /180) + (jogadorT.get_raio()/4)*sin(jogadorT.thetaCanhaoZ * PI /180) , 0, 0, -1);
+            // gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC), (jogadorT.get_z()-2) + sin(jogadorT.direcaoZ * PI /180) + (jogadorT.get_raio()/4)*sin(jogadorT.thetaCanhaoZ * PI /180) , 0, 0, -1);
+            gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC) + (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), lookZC , 0, 0, -1);
         }
 
     glMatrixMode(GL_MODELVIEW);
