@@ -15,7 +15,7 @@
 
 #define PI 3.1415
 
-float ilusao = 300.0;
+float ilusao = 50.0;
 
 using namespace std;
 
@@ -957,7 +957,7 @@ void Arena::andaZjogador(float z){
     this->jogador_config.set_z(this->jogador_config.get_z()+incremento);
 
     if(this->jogador_config.get_z() >= -this->raioBase - 2*this->jogador_config.get_raio() ){
-        this->jogador_config.set_z(-this->raioBase - this->jogador_config.get_raio());
+        this->jogador_config.set_z(-this->raioBase - 2*this->jogador_config.get_raio());
     }
     if(this->jogador_config.get_z() <= -14* jogador_config.get_raio()){
         this->jogador_config.set_z(-14* jogador_config.get_raio());
