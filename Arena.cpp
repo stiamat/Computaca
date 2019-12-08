@@ -941,7 +941,7 @@ void Arena::Desenha_MiniMapa(){
             raioJ = this->jogador_config.get_raio();
             direcaoJ = this->jogador_config.direcao;
             thetaCanhaoJ = this->jogador_config.thetaCanhao;
-            thetaHeliceJ = this->jogador_config.thetaHelice;
+            thetaHeliceJ = this->thetaHelice;
             Desenha_Jogador2D(0, xJ, yJ, raioJ, thetaCanhaoJ, thetaHeliceJ, direcaoJ);
         glPopAttrib();
     glPopMatrix();
