@@ -302,7 +302,7 @@ void Arena::print()
 void Arena::Desenha_Circulo(float raio, float r, float g, float b)
 {
     GLfloat x, y;
-    glColor3f(r, g, b);
+    glColor4f(r, g, b, 0.5);
 
     glBegin(GL_POLYGON);
         for (int ii = 0; ii < 360; ii++)
@@ -370,7 +370,7 @@ void Arena::DesenhaBaseInimiga(vector<Circle *> *lista_individuos){
 
 void Arena::Desenha_Retangulo(float height, float width, float r, float g, float b)
 {
-    glColor3f(r, g, b);
+    glColor4f(r, g, b, 0.5);
     glBegin(GL_POLYGON);
         glVertex3f(-width / 2, 0, 0.0);
         glVertex3f(width / 2, 0, 0.0);
@@ -621,7 +621,7 @@ void Arena::Desenha_Jogador2D(int ini, float xJ, float yJ, float raioJ, float th
 
         glPushMatrix();
             glTranslatef(0, -raioJ, 0);
-            // Desenha_Retangulo(raioJ / 2, raioJ / 10, 0, 0, 0);
+            Desenha_Retangulo(raioJ / 2, raioJ / 10, 0, 0, 0);
             // Desenha_Cubo(raioJ, this->textureAviao);
         glPopMatrix();
 
@@ -674,7 +674,7 @@ void Arena::Desenha_Jogador2D(int ini, float xJ, float yJ, float raioJ, float th
 void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB)
 {
     glPushMatrix();
-        glColor3f(corR, corG, corB);
+        glColor4f(corR, corG, corB,0.5);
         glBegin(GL_LINES);
             glVertex3f(x1, y1, 0.0);
             glVertex3f(x2, y2, 0.0);
@@ -881,32 +881,36 @@ void Arena::Desenha_Parede(){
 }
 
 void Arena::Desenha_MiniMapa(){
+
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
         glLoadIdentity();
         glOrtho(this->ortho_Config(1, 1), this->ortho_Config(1, -1), this->ortho_Config(2, -1), this->ortho_Config(2, 1), -1.0, 1.0);
+
+        glPushMatrix();
         glPushAttrib(GL_ENABLE_BIT);
             glDisable(GL_LIGHTING);
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_DEPTH_TEST);
+            glEnable( GL_BLEND );
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            
+            glTranslatef(this->arena_config.get_x(), this->arena_config.get_y(), 0);
+            glScalef(0.35,0.35,1);
+            glTranslatef(-this->arena_config.get_x(),-this->arena_config.get_y(),0);
+            Desenha_Circulo(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
+            
 
-            //glRotatef(180, 0, 0, 1);
-            // -- Desenha Arena -- //
-            // glPushMatrix();
-                glTranslatef(this->arena_config.get_x(), this->arena_config.get_y(), 0);
-                Desenha_Circulo(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
-            // glPopMatrix();
-
-            // -- Desenha Inimigos -- //
+            // -- Desenha BaseInimiga -- //
             Circle *ind;
             for (int i = 0; i < this->individuos.size(); i++){
                 ind = this->individuos[i];
                 glPushMatrix();
                     glTranslatef(this->arena_config.get_x() - ind->get_x(), this->arena_config.get_y() - ind->get_y(), 0);
-                    // glTranslatef(ind->get_x(), ind->get_y(), 0);
+                    
 
                     if(ind->get_corG() != 0){
-                        glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
+                        glColor4f(ind->get_corR(), ind->get_corG(), ind->get_corB(),0.5);
                         Desenha_Circulo(ind->get_raio(), ind->get_corR(), ind->get_corG(), ind->get_corB());
                     }
                 glPopMatrix();
@@ -914,8 +918,7 @@ void Arena::Desenha_MiniMapa(){
 
             // -- Desenha Pista -- //
              Desenha_Pista(arena_config.get_x() - pista_decolagem.get_x1(), arena_config.get_x() - pista_decolagem.get_x2(), arena_config.get_x() - pista_decolagem.get_y1(), arena_config.get_x() - pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
-            // Desenha_Pista(pista_decolagem.get_x1(), pista_decolagem.get_x2(), pista_decolagem.get_y1(), pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
-
+            
             // -- Desenha Tiro -- //
             for (int i = 0; i < this->tiros.size(); i++){
                 float x = (this->arena_config.get_x() - this->tiros[i]->get_Inix());
@@ -943,14 +946,37 @@ void Arena::Desenha_MiniMapa(){
             thetaCanhaoJ = this->jogador_config.thetaCanhao;
             thetaHeliceJ = this->thetaHelice;
             Desenha_Jogador2D(0, xJ, yJ, raioJ, thetaCanhaoJ, thetaHeliceJ, direcaoJ);
+
+            // -- Desenha Inimigos -- //
+
+            float origemX = this->arena_config.get_x();
+            float origemY = this->arena_config.get_y();
+
+            for (int i = 0; i < this->individuos.size(); i++)
+            {
+                ind = this->individuos[i];
+                glPushMatrix();
+                    glTranslatef(origemX - ind->get_x(), origemY - ind->get_y(), 0);
+                    if(ind->get_corG() == 0){
+                        // cout << ind->direcao << endl;
+                        // Desenha_Jogador(1, 0, 0, ind->get_z(), ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao, ind->direcaoZ, ind->thetaCanhaoZ);
+                        Desenha_Jogador2D(1, 0, 0, ind->get_raio(), ind->thetaCanhao, ind->thetaHelice, ind->direcao);
+                    }
+                glPopMatrix();
+            }
+
+
         glPopAttrib();
+        glPopMatrix();
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
+
 }
 
 
 void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *lista_individuos, Line *pista)
 {   
+    
     glPushMatrix();
 
         glTranslatef(arena->get_x(), arena->get_y(), 0);
@@ -977,6 +1003,7 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
            
 
     glPopMatrix();
+    
    
 };
 
