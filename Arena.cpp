@@ -682,6 +682,29 @@ void Arena::Desenha_Pista(float x1, float x2, float y1, float y2, float corR, fl
     glPopMatrix();
 };
 
+void Arena::Desenha_Pista3D(float x1, float x2, float y1, float y2, float corR, float corG, float corB)
+{
+    glPushMatrix();
+        float dist = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+        float distp20 = dist/20;
+        float ang = this->anguloJogador(x2,y2);
+        // glColor4f(corR, corG, corB,0.5);
+        GLuint text;
+        
+        glTranslatef(x1, y1, 9);
+        glRotatef(90-ang/2, 0, 0, 1);
+        glScalef(1,distp20,1);
+        glTranslatef(distp20/2, distp20/2, 0);
+        glTranslatef(-5, 2.5, 0);
+        
+        this->Desenha_Cubo(20,text);
+        // glBegin(GL_LINES);
+        //     glVertex3f(x1, y1, 0.0);
+        //     glVertex3f(x2, y2, 0.0);
+        // glEnd();
+    glPopMatrix();
+};
+
 void Arena::Desenha_Esfera(int raio, GLuint text){
     GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
     GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
@@ -731,14 +754,23 @@ void Arena::Desenha_Cubo(int raio, GLuint text){
         // gluQuadricOrientation(base, GLU_OUTSIDE);
         // gluQuadricTexture(base, GL_TRUE);
         
-        glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
+        // glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
+        // glEnable(GL_TEXTURE_GEN_T);
+        glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
+        // glEnable(GL_TEXTURE_GEN_R);
+        // glEnable(GL_TEXTURE_GEN_Q);
+
         glBindTexture (GL_TEXTURE_2D, text);
         // glScalef(0.1,0.3,0.1);
         glutSolidCube(20.0);
 
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
+        // glDisable(GL_TEXTURE_GEN_R);
+        // glDisable(GL_TEXTURE_GEN_Q);
+        // glDisable(GL_TEXTURE_GEN_S);
+        // glDisable(GL_TEXTURE_GEN_T);
         // gluSphere(base,20,20,20);
         // gluDeleteQuadric(base);
     glPopMatrix();
@@ -993,7 +1025,8 @@ void Arena::Desenha_Arena(Circle *arena, Circle *jogador, vector<Circle *> *list
 
         DesenhaBaseInimiga(lista_individuos);
 
-        Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
+        //Desenha_Pista(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
+        Desenha_Pista3D(arena->get_x() - pista->get_x1(), arena->get_x() - pista->get_x2(), arena->get_x() - pista->get_y1(), arena->get_x() - pista->get_y2(), pista->get_r(), pista->get_g(), pista->get_b());
 
         Desenha_Tiro();
 

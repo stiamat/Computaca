@@ -72,6 +72,7 @@ private:
     void DesenhaCilindro(GLuint text);
     void Desenha_Esfera(int raio, GLuint text);
     void Desenha_Cubo(int raio, GLuint text);
+    void Desenha_Pista3D(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
     void Desenha_Individuos(vector<Circle *> *lista_individuos);
     void DesenhaBaseInimiga(vector<Circle *> *lista_individuos);
     void Desenha_Pista(float x1, float x2, float y1, float y2, float corR, float corG, float corB);
