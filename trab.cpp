@@ -254,7 +254,7 @@ void display(void){
     // glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
     // glLightfv(GL_LIGHT1, GL_SPECULAR, white);
 
-    arena_modelo.Desenha();
+    arena_modelo.Desenha_MiniMapa();
 
     if(basesIniAgr != 0 && arena_modelo.getDecolagem() > 3){
         char perdeu[] = "Game Over!!! Aperte 'r' para recomecar!";

@@ -83,5 +83,6 @@ public:
     void andaXtiro(float x);
     void andaYtiro(float y);
     void andaZtiro(float z);
+    void Desenha2D();
 };
 #endif
