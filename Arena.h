@@ -262,16 +262,17 @@ public:
     {
         this->thetaCanhao += x;
         
-
         if (this->thetaCanhao < -30.0)
         {
             this->thetaCanhao = -30.0;
         }
+
         if (this->thetaCanhao > 30.0)
         {
             this->thetaCanhao = 30.0;
         }
-        this->jogador_config.thetaCanhao += x;
+
+        this->jogador_config.thetaCanhao = this->thetaCanhao;
     };
 
     void miraCanhaoZ(float z){

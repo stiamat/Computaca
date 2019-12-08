@@ -572,12 +572,6 @@ void idle(void){
         camera = 1;
     }
 
-    if(letras['m'] == 1){
-
-        
-
-    }
-
     if (letras['2'] == 1)
     {
         camera = 2;
