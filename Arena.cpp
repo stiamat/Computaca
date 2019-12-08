@@ -693,7 +693,7 @@ void Arena::Desenha_Pista3D(float x1, float x2, float y1, float y2, float corR, 
         
         glTranslatef(x1, y1, 9);
         glRotatef(90-ang/2, 0, 0, 1);
-        glScalef(1,distp20,1);
+        glScalef(1.5,distp20,1);
         glTranslatef(distp20/2, distp20/2, 0);
         glTranslatef(-5, 2.5, 0);
         
@@ -754,12 +754,11 @@ void Arena::Desenha_Cubo(int raio, GLuint text){
         // gluQuadricOrientation(base, GLU_OUTSIDE);
         // gluQuadricTexture(base, GL_TRUE);
         
-        // glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
-        // glEnable(GL_TEXTURE_GEN_T);
+         //enable texture coordinate generation
+        
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
-        // glEnable(GL_TEXTURE_GEN_R);
-        // glEnable(GL_TEXTURE_GEN_Q);
+        
 
         glBindTexture (GL_TEXTURE_2D, text);
         // glScalef(0.1,0.3,0.1);
@@ -767,10 +766,7 @@ void Arena::Desenha_Cubo(int raio, GLuint text){
 
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
-        // glDisable(GL_TEXTURE_GEN_R);
-        // glDisable(GL_TEXTURE_GEN_Q);
-        // glDisable(GL_TEXTURE_GEN_S);
-        // glDisable(GL_TEXTURE_GEN_T);
+
         // gluSphere(base,20,20,20);
         // gluDeleteQuadric(base);
     glPopMatrix();
