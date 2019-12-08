@@ -236,8 +236,10 @@ void display(void){
 
     glMatrixMode(GL_MODELVIEW);
     
-    GLfloat light_position[] = { 500.0, 500.0, -16*jogadorT.get_raio()+30, 1 };
+    GLfloat light_position[] = { 500.0, 500.0, -20*jogadorT.get_raio(), 1 };
+    GLfloat light0[]={1,1,1,1};
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,light0);
     
     // GLfloat farol_position[] = { jogadorT.get_x() - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_y() - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_z(), 1 };
     // GLfloat farol_direction[] = {jogadorT.get_x() - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao), jogadorT.get_y() - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao), -(jogadorT.get_z() + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcaoZ))};
