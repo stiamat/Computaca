@@ -481,7 +481,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
 
             glTranslatef(0, raio, 0);
             glTranslatef(0, -raio/(raio*2), 0);
-            
+
             glRotatef(thetaCanhao, 0, 0, 1);
             glRotatef(thetaCanhaoZ, 1, 0, 0);
             // Desenha_Retangulo(raio / 4, raio / 10, 0, 0, 0);
@@ -892,18 +892,18 @@ void Arena::Desenha_MiniMapa(){
 
             //glRotatef(180, 0, 0, 1);
             // -- Desenha Arena -- //
-            glPushMatrix();
+            // glPushMatrix();
                 glTranslatef(this->arena_config.get_x(), this->arena_config.get_y(), 0);
                 Desenha_Circulo(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
-            glPopMatrix();
+            // glPopMatrix();
 
             // -- Desenha Inimigos -- //
             Circle *ind;
             for (int i = 0; i < this->individuos.size(); i++){
                 ind = this->individuos[i];
                 glPushMatrix();
-                    // glTranslatef(this->arena_config.get_x() - ind->get_x(), this->arena_config.get_y() - ind->get_y(), 0);
-                    glTranslatef(ind->get_x(), ind->get_y(), 0);
+                    glTranslatef(this->arena_config.get_x() - ind->get_x(), this->arena_config.get_y() - ind->get_y(), 0);
+                    // glTranslatef(ind->get_x(), ind->get_y(), 0);
 
                     if(ind->get_corG() != 0){
                         glColor3f(ind->get_corR(), ind->get_corG(), ind->get_corB());
@@ -913,8 +913,8 @@ void Arena::Desenha_MiniMapa(){
             }
 
             // -- Desenha Pista -- //
-            // Desenha_Pista(arena_config.get_x() - pista_decolagem.get_x1(), arena_config.get_x() - pista_decolagem.get_x2(), arena_config.get_x() - pista_decolagem.get_y1(), arena_config.get_x() - pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
-            Desenha_Pista(pista_decolagem.get_x1(), pista_decolagem.get_x2(), pista_decolagem.get_y1(), pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
+             Desenha_Pista(arena_config.get_x() - pista_decolagem.get_x1(), arena_config.get_x() - pista_decolagem.get_x2(), arena_config.get_x() - pista_decolagem.get_y1(), arena_config.get_x() - pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
+            // Desenha_Pista(pista_decolagem.get_x1(), pista_decolagem.get_x2(), pista_decolagem.get_y1(), pista_decolagem.get_y2(), pista_decolagem.get_r(), pista_decolagem.get_g(), pista_decolagem.get_b());
 
             // -- Desenha Tiro -- //
             for (int i = 0; i < this->tiros.size(); i++){
@@ -936,8 +936,8 @@ void Arena::Desenha_MiniMapa(){
             // -- Desenha Jogador -- //
 
             float xJ, yJ, raioJ, direcaoJ, thetaCanhaoJ, thetaHeliceJ;
-            xJ = this->jogador_config.get_x();
-            yJ = this->jogador_config.get_y();
+            xJ = this->arena_config.get_x() - this->jogador_config.get_x();
+            yJ = this->arena_config.get_y() - this->jogador_config.get_y();
             raioJ = this->jogador_config.get_raio();
             direcaoJ = this->jogador_config.direcao;
             thetaCanhaoJ = this->jogador_config.thetaCanhao;
