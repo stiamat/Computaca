@@ -212,11 +212,15 @@ void display(void){
             // gluLookAt(500-lookX, 500-lookY, jogadorT.get_z()-10, 500-x2, 500-y2, jogadorT.get_z(), 0, 0, -1);
             glRotatef(180,1,0,0);
             glRotatef(180,0,0,1);
+
+
+            glTranslatef(0,0,30);
+            glRotatef(camXZAngle,1,0,0);
+            glRotatef(camXYAngle,0,0,1);
             
             glRotatef(jogadorT.direcao,0,0,1);
-            glTranslatef(-500+(jogadorT.get_x() - 500),-500+(jogadorT.get_y() - 500),-jogadorT.get_z()+30);
-            glRotatef(camXZAngle,1,0,0);
-            glRotatef(camXYAngle,0,1,0);
+            glTranslatef(-500+(jogadorT.get_x() - 500),-500+(jogadorT.get_y() - 500),-jogadorT.get_z());
+            
             // glRotatef(180,0,1,0);         
         }
 
@@ -354,20 +358,39 @@ void motion(int x, int y){
         arena_modelo.miraCanhaoZ(-1);
         deltaYold = y;
     }
+}
 
-    if (!buttonDown)
-        return;
-    
-    camXYAngle += x - lastX;
-    camXZAngle += y - lastY;
-    
-    camXYAngle = (int)camXYAngle % 360;
-    camXZAngle = (int)camXZAngle % 360;
-    
-    lastX = x;
-    lastY = y;
-    printf("oi\n");
-    glutPostRedisplay();
+void mouseAtivMotion(int x, int y){
+    if(camera == 3){
+        if (buttonDown == 0) return;
+        
+        camXYAngle += x - lastX;
+        camXZAngle += y - lastY;
+        
+        camXYAngle = (int)camXYAngle % 360;
+        camXZAngle = (int)camXZAngle % 360;
+        
+        if(camXYAngle >= 180){
+            camXYAngle = 180;
+        }
+
+        if(camXYAngle <= -180){
+            camXYAngle = -180;
+        }
+
+        if(camXZAngle >= 60){
+            camXZAngle = 60;
+        }
+
+        if(camXZAngle <= -60){
+            camXZAngle = -60;
+        }
+        
+        lastX = x;
+        lastY = y;
+        // printf("oi\n");
+        glutPostRedisplay();
+    }
 }
 
 void mouse(int button, int state, int x, int y){
@@ -638,6 +661,7 @@ int main(int argc, char **argv){
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyup);
     glutPassiveMotionFunc(motion);
+    glutMotionFunc(mouseAtivMotion);
     glutMouseFunc(mouse);
 
     glutIdleFunc(idle);
