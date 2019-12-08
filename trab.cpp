@@ -23,7 +23,7 @@ char textImprimir[100];
 const char digits[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 double camXYAngle=0;
-double camXZAngle=0;
+double camXZAngle=60;
 int buttonDown = 0;
 int minimapa = 0;
 
