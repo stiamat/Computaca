@@ -492,6 +492,11 @@ void keyPress(unsigned char key, int x, int y){
         break;
     case 'm':
         letras['m'] = 1;
+        if(minimapa == 0){
+            minimapa = 1;
+        }else{
+            minimapa = 0;
+        }
         break;
     default:
         break;
@@ -566,12 +571,8 @@ void idle(void){
 
     if(letras['m'] == 1){
 
-        if(minimapa == 0){
-            minimapa = 1;
-        }else{
-            minimapa = 0;
-        }
         
+
     }
 
     if (letras['2'] == 1)
