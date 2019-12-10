@@ -26,7 +26,28 @@ double camXYAngle=0;
 double camXZAngle=60;
 int buttonDown = 0;
 int minimapa = 0;
-int mononoturno = 0;
+int modonoturno = 0;
+
+
+GLuint textureParedes1;       
+GLuint textureBaseInimiga1;   
+GLuint textureBala1;          
+GLuint textureChao1;          
+GLuint textureAviao1;         
+GLuint textureAviaoIni1;      
+GLuint textureCeu1;           
+GLuint textureCabineAviao1;   
+GLuint texturePista1;         
+
+GLuint textureParedes2;      
+GLuint textureBaseInimiga2;   
+GLuint textureBala2;          
+GLuint textureChao2;          
+GLuint textureAviao2;        
+GLuint textureAviaoIni2;      
+GLuint textureCeu2;           
+GLuint textureCabineAviao2;
+GLuint texturePista2;         
 
 
 
@@ -479,10 +500,10 @@ void keyPress(unsigned char key, int x, int y){
     {
     case 'n':
         letras['n'] = 1;
-        if(mononoturno == 0){
-            mononoturno = 1;
+        if(modonoturno == 0){
+            modonoturno = 1;
         }else{
-            mononoturno = 0;
+            modonoturno = 0;
         }
         break;
     case ' ':
@@ -593,6 +614,28 @@ void idle(void){
         timeOld = timeNew;
     }else{
         return;
+    }
+
+    if(modonoturno == 0){
+        arena_modelo.textureParedes = textureParedes1;
+        arena_modelo.textureBaseInimiga = textureBaseInimiga1;
+        arena_modelo.textureBala = textureBala1;
+        arena_modelo.textureChao = textureChao1;
+        arena_modelo.textureAviao = textureAviao1;
+        arena_modelo.textureAviaoIni = textureAviaoIni1;
+        arena_modelo.textureCeu = textureCeu1;
+        arena_modelo.textureCabineAviao = textureCabineAviao1;
+        arena_modelo.texturePista = texturePista1;
+    }else{
+        arena_modelo.textureParedes = textureParedes2;
+        arena_modelo.textureBaseInimiga = textureBaseInimiga2;
+        arena_modelo.textureBala = textureBala2;
+        arena_modelo.textureChao = textureChao2;
+        arena_modelo.textureAviao = textureAviao2;
+        arena_modelo.textureAviaoIni = textureAviaoIni2;
+        arena_modelo.textureCeu = textureCeu2;
+        arena_modelo.textureCabineAviao = textureCabineAviao2;
+        arena_modelo.texturePista = texturePista2;
     }
     
     if(eixo == 0){
@@ -707,27 +750,28 @@ int main(int argc, char **argv){
     glutCreateWindow("trabalho 4");
     init();
     
-    if(mononoturno == 0){
-        arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("wxp.bmp");
-        arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
-        arena_modelo.textureBala = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureChao = arena_modelo.LoadTextureRAW("grass.bmp");
-        arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("grass.bmp");
-        arena_modelo.textureCabineAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
-        arena_modelo.texturePista = arena_modelo.LoadTextureRAW("grass.bmp");
-    }else{
-        arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("stars1.bmp");
-        arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("lava.bmp");
-        arena_modelo.textureBala = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureChao = arena_modelo.LoadTextureRAW("lava.bmp");
-        arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("camuflado.bmp");
-        arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("stars1.bmp");
-        arena_modelo.textureCabineAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
-        arena_modelo.texturePista = arena_modelo.LoadTextureRAW("lava.bmp");
-    }
+    
+    textureParedes1       = arena_modelo.LoadTextureRAW("wxp.bmp");
+    textureBaseInimiga1   = arena_modelo.LoadTextureRAW("pedra.bmp");
+    textureBala1          = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureChao1          = arena_modelo.LoadTextureRAW("grass.bmp");
+    textureAviao1         = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureAviaoIni1      = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureCeu1           = arena_modelo.LoadTextureRAW("teste.bmp");
+    textureCabineAviao1   = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+    texturePista1         = arena_modelo.LoadTextureRAW("ceuceu.bmp");
+
+    //--------------------------------------Noturno -------------------
+    textureParedes2       = arena_modelo.LoadTextureRAW("stars1.bmp");
+    textureBaseInimiga2   = arena_modelo.LoadTextureRAW("lava.bmp");
+    textureBala2          = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureChao2          = arena_modelo.LoadTextureRAW("lava.bmp");
+    textureAviao2         = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureAviaoIni2      = arena_modelo.LoadTextureRAW("camuflado.bmp");
+    textureCeu2           = arena_modelo.LoadTextureRAW("stars1.bmp");
+    textureCabineAviao2   = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+    texturePista2         = arena_modelo.LoadTextureRAW("lava.bmp");
+    
 
 
     

@@ -460,7 +460,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(-15.0, 0, 0, 1);
-            glScalef(1,0.3,0.1);
+            glScalef(1,0.3,0.05);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -469,7 +469,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(raio / 2 + raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
 
-            glScalef(0.1,0.6,0.05);
+            glScalef(0.05,0.6,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
@@ -478,7 +478,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(-raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(15.0, 0, 0, 1);
-            glScalef(1,0.3,0.1);
+            glScalef(1,0.3,0.05);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -486,7 +486,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(-raio / 2 - raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
-            glScalef(0.1,0.6,0.05);
+            glScalef(0.05,0.6,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
@@ -1382,9 +1382,9 @@ void Arena::limpaTiros(){
                 Circle *aux = this->individuos[j];
                 if (aux->get_corG() != 0)
                 {
-                    float dist = sqrt(pow(aux->get_x() - this->tiros[i]->get_Inix(), 2) + pow(aux->get_y() - this->tiros[i]->get_Iniy(), 2)+ pow(aux->get_z() - this->tiros[i]->get_z(), 2));
+                    float dist = sqrt(pow(aux->get_x() - this->tiros[i]->get_Inix(), 2) + pow(aux->get_y() - this->tiros[i]->get_Iniy(), 2) + pow(aux->get_z() - this->tiros[i]->get_z(), 2));
                     
-                    if (dist <= (aux->get_raio() + (this->tiros[i]->get_raio()*0.3)))
+                    if (dist <= (aux->get_raio() + (this->tiros[i]->get_raio()*0.2)))
                     {
                         aux->colisao = 1;
                         this->individuos.erase(this->individuos.begin() + j);
