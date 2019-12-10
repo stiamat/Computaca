@@ -26,6 +26,7 @@ double camXYAngle=0;
 double camXZAngle=60;
 int buttonDown = 0;
 int minimapa = 0;
+int mononoturno = 0;
 
 
 
@@ -205,18 +206,22 @@ void display(void){
         float lookX = jogadorT.get_x() - 500 - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao);
         float lookY = jogadorT.get_y() - 500 - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao);
         
-        float xC = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * jogadorT.get_raio();
-        float yC = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * jogadorT.get_raio();
+        // float xC = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * jogadorT.get_raio()/2;
+        // float yC = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * jogadorT.get_raio()/2;
         
         float anguloLook;
        /* if(jogadorT.thetaCanhao < 0) anguloLook = -(30 + abs(jogadorT.thetaCanhao)) - jogadorT.direcao;
-        else*/ anguloLook = -jogadorT.thetaCanhao - jogadorT.direcao;
-        float anguloLookZ = -jogadorT.thetaCanhaoZ - jogadorT.direcaoZ;
-        float lookXC = jogadorT.get_x() - 500 - jogadorT.get_raio()/4*(sin(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
-        float lookYC = jogadorT.get_y() - 500 - jogadorT.get_raio()/4*(cos(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
-        float lookZC = jogadorT.get_z() - jogadorT.get_raio()/4*(sin(anguloLookZ* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
-        // float lookXC = jogadorT.get_x() - 500 - (jogadorT.get_raio()/4)*sin(-jogadorT.thetaCanhao * PI /180) - (jogadorT.get_raio()/4)*sin(-jogadorT.direcao * PI /180) ;
-        // float lookYC = jogadorT.get_y() - 500 - (jogadorT.get_raio()/4)*cos(-jogadorT.thetaCanhao * PI /180) - (jogadorT.get_raio()/4)*cos(-jogadorT.direcao * PI /180);
+        // else*/ anguloLook = jogadorT.thetaCanhao - jogadorT.direcao;
+        float anguloZ = jogadorT.thetaCanhaoZ - jogadorT.direcaoZ;
+
+        float xC = jogadorT.get_x() - 500 - sin(jogadorT.direcao * PI /180) * jogadorT.get_raio();
+        float yC = jogadorT.get_y() - 500 - cos(jogadorT.direcao * PI /180) * jogadorT.get_raio();
+        // float anguloLookZ = -jogadorT.thetaCanhaoZ - jogadorT.direcaoZ;
+        // float lookXC = jogadorT.get_x() - 500 - jogadorT.get_raio()/4*(sin(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        // float lookYC = jogadorT.get_y() - 500 - jogadorT.get_raio()/4*(cos(anguloLook* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        // float lookZC = jogadorT.get_z() - jogadorT.get_raio()/4*(sin(anguloLookZ* PI /180) * (jogadorT.get_raio()+jogadorT.get_raio()/4));
+        float lookXC = jogadorT.get_x() - 500 - (5*jogadorT.get_raio())*sin(-anguloLook * PI /180) ;//- (jogadorT.get_raio())*sin(jogadorT.direcao * PI /180) ;
+        float lookYC = jogadorT.get_y() - 500 - (5*jogadorT.get_raio())*cos(-anguloLook * PI /180) ;//- (jogadorT.get_raio())*cos(jogadorT.direcao * PI /180);
         glLoadIdentity();
         if(camera == 3){
             gluPerspective(90, 1, 3, 1000);
@@ -240,31 +245,38 @@ void display(void){
 
         if(camera == 1){
             gluPerspective(90, 1, 1, 1000);
-            gluLookAt(500 - x2, 500 - y2, (jogadorT.get_z()-10) - 7.5*sin(jogadorT.direcaoZ * PI /180), (500 - lookX), (500 - lookY), (jogadorT.get_z()-10) + 7.5*sin(jogadorT.direcaoZ * PI /180), 0, 0, -1);    
+            gluLookAt(500 - x2, 500 - y2, (jogadorT.get_z()-10) - sin(jogadorT.direcaoZ * PI /180), (500 - lookX), (500 - lookY), (jogadorT.get_z()-10) + sin(jogadorT.direcaoZ * PI /180), 0, 0, -1);    
             
         }
 
         if(camera == 2){
             gluPerspective(90, 1, 1, 1000);
             // gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC), (jogadorT.get_z()-2) + sin(jogadorT.direcaoZ * PI /180) + (jogadorT.get_raio()/4)*sin(jogadorT.thetaCanhaoZ * PI /180) , 0, 0, -1);
-            gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC) + (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), lookZC , 0, 0, -1);
+            gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2), (500 - lookXC), (500 - lookYC), (jogadorT.get_z()-2) - 170*sin(-jogadorT.thetaCanhaoZ * PI /180) - 500*sin(-jogadorT.direcaoZ * PI /180), 0, 0, -1);
+            // gluLookAt(500 - xC, 500 - yC, (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), (500 + lookXC), (500 + lookYC) + (jogadorT.get_z()-2) - sin(jogadorT.direcaoZ * PI /180) - sin(jogadorT.thetaCanhaoZ * PI /180), lookZC , 0, 0, -1);
         }
 
-    glMatrixMode(GL_MODELVIEW);
+    
     
     GLfloat light_position[] = { 500.0, 500.0, -20*jogadorT.get_raio(), 1 };
     GLfloat light0[]={1,1,1,1};
+    GLfloat white[4] = { 1, 1, 1, 0 };
 
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,light0);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,white);
     
-    // GLfloat farol_position[] = { jogadorT.get_x() - sin(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_y() - cos(jogadorT.direcao * PI /180) * (jogadorT.get_raio()), jogadorT.get_z(), 1 };
-    // GLfloat farol_direction[] = {jogadorT.get_x() - 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcao), jogadorT.get_y() - 20*arena_modelo.multiplicadorDeslocamentoX(jogadorT.direcao), -(jogadorT.get_z() + 20*arena_modelo.multiplicadorDeslocamentoY(jogadorT.direcaoZ))};
+    GLfloat farol_position[] = { 500 - x2, 500-y2, (float)(jogadorT.get_z()-10), 1 };
+    GLfloat farol_direction[] = {500 - lookX, 500 - lookY, (float)(jogadorT.get_z()-10)};
     // GLfloat white[4] = { 1, 1, 1, 0 };
-    // glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 1);
+
     // glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, farol_direction);
+    // glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 90);
+    // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2);
     // glLightfv(GL_LIGHT1, GL_POSITION, farol_position);
-    // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 32);
+    
+    glMatrixMode(GL_MODELVIEW);
+    
+    
     // glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.2);
     // glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
     // glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
@@ -297,7 +309,7 @@ void display(void){
     
     // glMatrixMode(GL_PROJECTION);
     limpaTexto();
-    strcpy(textImprimir, "Bases Inimigas: ");
+    strcpy(textImprimir, "Bases Destruidas: ");
     char c = (basesIni-basesIniAgr) + '0';
     textImprimir[strlen(textImprimir)] = c ;
     
@@ -436,7 +448,7 @@ void mouse(int button, int state, int x, int y){
         {
             // cout << "entrei2" << endl;
         }
-        if (GLUT_RIGHT_BUTTON == button)
+        if (GLUT_RIGHT_BUTTON == button && letras[' '] == 0)
         {
             if (GLUT_UP == state)
             {
@@ -451,7 +463,7 @@ void mouse(int button, int state, int x, int y){
         }
     }
 
-    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && letras[' '] == 1) {
         lastX = x;
         lastY = y;
         buttonDown = 1;
@@ -465,6 +477,17 @@ void mouse(int button, int state, int x, int y){
 void keyPress(unsigned char key, int x, int y){
     switch (key)
     {
+    case 'n':
+        letras['n'] = 1;
+        if(mononoturno == 0){
+            mononoturno = 1;
+        }else{
+            mononoturno = 0;
+        }
+        break;
+    case ' ':
+        letras[' '] = 1;
+        break;
     case '3':
         letras['3'] = 1;
         break;
@@ -514,6 +537,12 @@ void keyPress(unsigned char key, int x, int y){
 void keyup(unsigned char key, int x, int y){
     switch (key)
     {
+    case 'n':
+        letras['n'] = 0;
+        break;
+    case ' ':
+        letras[' '] = 0;
+        break;
     case '3':
         letras['3'] = 0;
         break;
@@ -570,7 +599,7 @@ void idle(void){
         arena_modelo.colocaAviaoNosEixo(arena_reset.get_jogador().get_x(), arena_reset.get_jogador().get_y(), arena_reset.get_jogador().direcao);
     }
 
-// ---------- Tratando Casos --------------
+    // ---------- Tratando Casos --------------
 
     if (letras['1'] == 1)
     {
@@ -678,16 +707,30 @@ int main(int argc, char **argv){
     glutCreateWindow("trabalho 4");
     init();
     
-    // glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_BLEND);
-    // glDepthMask(true);
-    arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("wxp.bmp");
-    arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
-    arena_modelo.textureBala = arena_modelo.LoadTextureRAW("largada.bmp");
-    arena_modelo.textureChao = arena_modelo.LoadTextureRAW("grass.bmp");
-    arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
-    arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("largada.bmp");
-    arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("grass.bmp");
+    if(mononoturno == 0){
+        arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("wxp.bmp");
+        arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("largada.bmp");
+        arena_modelo.textureBala = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureChao = arena_modelo.LoadTextureRAW("grass.bmp");
+        arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("grass.bmp");
+        arena_modelo.textureCabineAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+        arena_modelo.texturePista = arena_modelo.LoadTextureRAW("grass.bmp");
+    }else{
+        arena_modelo.textureParedes = arena_modelo.LoadTextureRAW("stars1.bmp");
+        arena_modelo.textureBaseInimiga = arena_modelo.LoadTextureRAW("lava.bmp");
+        arena_modelo.textureBala = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureChao = arena_modelo.LoadTextureRAW("lava.bmp");
+        arena_modelo.textureAviao = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureAviaoIni = arena_modelo.LoadTextureRAW("camuflado.bmp");
+        arena_modelo.textureCeu = arena_modelo.LoadTextureRAW("stars1.bmp");
+        arena_modelo.textureCabineAviao = arena_modelo.LoadTextureRAW("LightTeal.bmp");
+        arena_modelo.texturePista = arena_modelo.LoadTextureRAW("lava.bmp");
+    }
+
+
+    
 
 
     glutKeyboardFunc(keyPress);

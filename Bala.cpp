@@ -78,11 +78,11 @@ void Bala::Desenha(GLint texte)
             // glEnable(GL_TEXTURE_2D);
                 GLUquadricObj *bola = gluNewQuadric();
                 gluQuadricNormals(bola, GLU_SMOOTH);
-                gluQuadricOrientation(bola,  GLU_INSIDE);
+                gluQuadricOrientation(bola,  GLU_OUTSIDE);
                 gluQuadricTexture(bola, GL_TRUE);
 
                 glBindTexture (GL_TEXTURE_2D, texte);
-
+                
                 gluSphere(tiro,this->solido.get_raio()/10, 10, 10);
                 gluDeleteQuadric(bola);
 
@@ -104,7 +104,45 @@ void Bala::Desenha(GLint texte)
         //     glVertex3f(x, y, 0); // cria o vértice
         // }
         // glEnd();
-        gluSphere(bomba,this->solido.get_raio()*0.3, 10, 10);
+
+        glPushMatrix();
+
+            GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+            GLfloat materialColorA[] = { 0.5, 0.5, 0.5, 1};
+            GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1};
+            GLfloat mat_shininess[] = { 50.0 };
+            glColor3f(0,0.5,0.5); //meu
+        
+            glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+            glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+            glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+            
+
+            // glEnable(GL_TEXTURE_2D);
+                GLUquadricObj *bola = gluNewQuadric();
+                gluQuadricNormals(bola, GLU_SMOOTH);
+                gluQuadricOrientation(bola,  GLU_OUTSIDE);
+                gluQuadricTexture(bola, GL_TRUE);
+
+                glBindTexture (GL_TEXTURE_2D, texte);
+                glPushMatrix();
+                    glScalef(0.5,0.5,1);
+                    glTranslatef(0,0,-4);
+                    gluCylinder(bomba,this->solido.get_raio()*0.2,this->solido.get_raio()*0.2, 2,10,10);
+                glPopMatrix();
+
+                glScalef(0.5,0.5,1);
+                gluSphere(bomba,this->solido.get_raio()*0.2, 10, 10);
+                gluDeleteQuadric(bola);
+
+            // glDisable(GL_TEXTURE_2D);
+            
+        glPopMatrix();
+
+        // gluSphere(bomba,this->solido.get_raio()*0.3, 10, 10);
     }
 };
 

@@ -302,9 +302,24 @@ void Arena::print()
 void Arena::Desenha_Circulo(float raio, float r, float g, float b)
 {
     GLfloat x, y;
-    glColor4f(r, g, b, 0.5);
+    glColor4f(r, g, b, 1);
 
     glBegin(GL_POLYGON);
+        for (int ii = 0; ii < 360; ii++)
+        {
+            x = raio * cos(PI * ii / 180);
+            y = raio * sin(PI * ii / 180);
+            glVertex3f(x, y, 0); // cria o vértice
+        }
+    glEnd();
+};
+
+void Arena::Desenha_CirculoVazado(float raio, float r, float g, float b)
+{
+    GLfloat x, y;
+    glColor4f(r, g, b, 1);
+
+    glBegin( GL_LINES);
         for (int ii = 0; ii < 360; ii++)
         {
             x = raio * cos(PI * ii / 180);
@@ -445,7 +460,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(-15.0, 0, 0, 1);
-            glScalef(1,0.4,0.1);
+            glScalef(1,0.3,0.1);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -454,7 +469,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(raio / 2 + raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
 
-            glScalef(0.1,0.7,0.05);
+            glScalef(0.1,0.6,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
@@ -463,7 +478,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(-raio / 3, -raio / 3, 0);
             //glScalef(0.1,0.3,1);
             glRotatef(15.0, 0, 0, 1);
-            glScalef(1,0.4,0.1);
+            glScalef(1,0.3,0.1);
             // Desenha_Retangulo(raio / 4, raio, 0, 0, 0);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
@@ -471,16 +486,15 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
         glPushMatrix();
             glTranslatef(-raio / 2 - raio / 10, -raio / 4, 0);
             // Desenha_Retangulo(raio / 3, raio / 10, 0, 0, 0);
-            glScalef(0.1,0.7,0.05);
+            glScalef(0.1,0.6,0.05);
             Desenha_Cubo(raio, this->textureAviao);
         glPopMatrix();
 
         //canhão
         glPushMatrix();
             
-
             glTranslatef(0, raio, 0);
-            glTranslatef(0, -raio/(raio*2), 0);
+            glTranslatef(0, -1, 0);
 
             glRotatef(thetaCanhao, 0, 0, 1);
             glRotatef(thetaCanhaoZ, 1, 0, 0);
@@ -496,7 +510,7 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
 
         //desenha elipse
         glPushMatrix();
-            glScalef(0.3, 1, 0.3);
+            glScalef(0.2, 1, 0.2);
             if(ini == 1){
                 // Desenha_Circulo(raio, 1, 0, 0);
                 Desenha_Esfera(raio,this->textureAviaoIni);
@@ -510,16 +524,20 @@ void Arena::Desenha_Jogador(int ini, float x, float y, float z, float raio, floa
             glTranslatef(0, -raio, 0);
             // Desenha_Retangulo(raio / 2, raio / 10, 0, 0, 0);
             // Desenha_Cubo(raio, this->textureAviao);
+            glTranslatef(0, 2, -2);
+            glScalef(0.03, 0.05, 0.1);
+            glRotatef(45,1,0,0);
+            // glTranslatef(0, 30, -10);
+            Desenha_Esfera(raio,this->textureAviao);
         glPopMatrix();
 
         //desenha cabine
         glPushMatrix();
             glTranslatef(0, raio / 2, 0);
-            glScalef(0.1, 0.3, 0.3);
+            glScalef(0.1, 0.3, 0.2);
             // Desenha_Circulo(raio, 0, 0, 0);
-            Desenha_Esfera(raio,this->textureAviao);
+            Desenha_Esfera(raio,this->textureCabineAviao);
         glPopMatrix();
-
         //Helice Direita
         glPushMatrix();
             glTranslatef(-raio / 2 - raio / 10, raio / 15, 0);
@@ -689,19 +707,44 @@ void Arena::Desenha_Pista3D(float x1, float x2, float y1, float y2, float corR, 
         float distp20 = dist/20;
         float ang = this->anguloJogador(x2,y2);
         // glColor4f(corR, corG, corB,0.5);
-        GLuint text;
         
         glTranslatef(x1, y1, 9);
         glRotatef(90-ang/2, 0, 0, 1);
         glScalef(1.5,distp20,1);
         glTranslatef(distp20/2, distp20/2, 0);
         glTranslatef(-5, 2.5, 0);
+
         
-        this->Desenha_Cubo(20,text);
-        // glBegin(GL_LINES);
-        //     glVertex3f(x1, y1, 0.0);
-        //     glVertex3f(x2, y2, 0.0);
-        // glEnd();
+        GLfloat materialEmission[] = { 0.10, 0.10, 0.10, 1};
+        GLfloat materialColorA[] = { 0.2, 0.2, 0.2, 1};
+        GLfloat materialColorD[] = { 1.0, 1.0, 1.0, 1};
+        GLfloat mat_specular[] = { 5.0, 5.0, 5.0, 1};
+        GLfloat mat_shininess[] = { 50.0 };
+        glColor3f(corR,corG,corB);
+
+        glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+        
+        
+        glPushMatrix();
+
+            glEnable(GL_TEXTURE_GEN_S);
+            glEnable(GL_TEXTURE_GEN_T);
+            
+
+            glBindTexture (GL_TEXTURE_2D, this->texturePista);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+            glutSolidCube(20.0);
+
+            glDisable(GL_TEXTURE_GEN_S);
+            glDisable(GL_TEXTURE_GEN_T);
+
+        glPopMatrix();
     glPopMatrix();
 };
 
@@ -758,10 +801,15 @@ void Arena::Desenha_Cubo(int raio, GLuint text){
         
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
-        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glBindTexture (GL_TEXTURE_2D, text);
         // glScalef(0.1,0.3,0.1);
+        
+        
         glutSolidCube(20.0);
 
         glDisable(GL_TEXTURE_GEN_S);
@@ -926,7 +974,7 @@ void Arena::Desenha_MiniMapa(){
             glTranslatef(this->arena_config.get_x(), this->arena_config.get_y(), 0);
             glScalef(0.25,0.25,1);
             glTranslatef(-this->arena_config.get_x()-this->arena_config.get_x()/2,-this->arena_config.get_y()/2-this->arena_config.get_y(),0);
-            Desenha_Circulo(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
+            Desenha_CirculoVazado(this->arena_config.get_raio(), this->arena_config.get_corR(), this->arena_config.get_corG(), this->arena_config.get_corB());
             
 
             // -- Desenha BaseInimiga -- //
@@ -1076,7 +1124,7 @@ void Arena::decolando()
         float m = ((2.0 * (this->deltaS / 2)) - distanciaJogadorFimPista()) / (this->deltaS / 2.0);
         // float novoRaio = this->raioOriginalJogador * m;
         // this->jogador_config.set_raio(novoRaio);
-        float z1 = pow(m/2,2);
+        float z1 = pow(m,1.5);
         this->jogador_config.set_z( (this->jogador_config.get_z()) - z1);
         this->jogador_config.direcaoZ = -10 * (m-1); 
         
@@ -1190,8 +1238,9 @@ void Arena::andaZjogador(float z){
     float incremento = 3*sin(this->jogador_config.direcaoZ * PI / 180.0);
     this->jogador_config.set_z(this->jogador_config.get_z()+incremento);
 
-    if(this->jogador_config.get_z() >= -this->raioBase - 2*this->jogador_config.get_raio() ){
-        this->jogador_config.set_z(-this->raioBase - 2*this->jogador_config.get_raio());
+    if(this->jogador_config.get_z() >= -this->raioBase - 4*this->jogador_config.get_raio() ){
+        this->jogador_config.set_z(-this->raioBase - 4*this->jogador_config.get_raio());
+        printf("%f \n",this->jogador_config.get_z());
     }
     if(this->jogador_config.get_z() <= -14* jogador_config.get_raio()){
         this->jogador_config.set_z(-14* jogador_config.get_raio());
@@ -1537,8 +1586,8 @@ void Arena::atualizaInimigos(float p){
 
             float incremento = 3*sin(ind->direcaoZ * PI / 180.0);
             ind->set_z(ind->get_z()+incremento);
-            if(ind->get_z() >= (-this->raioBase - 2*ind->get_raio())){
-                ind->set_z(-this->raioBase - 2*ind->get_raio());
+            if(ind->get_z() >= (-this->raioBase - 4*ind->get_raio())){
+                ind->set_z(-this->raioBase - 4*ind->get_raio());
             }
 
             if(ind->get_z() <= -14* jogador_config.get_raio()){
